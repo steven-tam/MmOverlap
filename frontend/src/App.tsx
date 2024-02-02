@@ -13,8 +13,8 @@ function App() {
     /*
     handleMajorChange is linked to the onChange attribute in the html input tag.
     Consider event.target.value, the event here is when we type something into the 
-    input. target.value is syntax that tells the computer to hold onto whatever is
-    typed into input.
+    input. target.value is syntax that tells the computer to hold whatever is
+    typed in input.
     */
     setNewMajor(event.target.value) 
     console.log(newMajor) //If you open developer tool, for me the shortcut is ctrl + shift + j, 
@@ -62,12 +62,12 @@ function App() {
             {minors.map(minor => <li>{minor}</li>)}
           </ul>
         </td>
-
       </table>
   
       <form onSubmit={addMajor}>
         <div > 
-          Add a Major: <input value={newMajor} onChange={handleMajorChange} id="majorInput" />
+          <label htmlFor="majorInput">Add a Major: </label>
+          <input value={newMajor} onChange={handleMajorChange} id="majorInput" />
         </div>
         <div>
           <button type="submit">add</button>
@@ -76,7 +76,8 @@ function App() {
 
       <form onSubmit={addMinor}>
         <div>
-          Add a Minor: <input value={newMinor} onChange={handleMinorChange} />
+            <label htmlFor="minorInput">Add a Major: </label>
+            <input value={newMinor} onChange={handleMinorChange} id="minorInput" />
         </div>
         <div>
           <button type="submit">add</button>

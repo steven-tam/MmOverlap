@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+label {
+  display: block;
+}
+
 .container {
   border: 5px;
   border-color: blue;
