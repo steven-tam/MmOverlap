@@ -1,5 +1,5 @@
 # MmOverlap
- A project form Social Coding Club at the University of Minnesota
+ A project from Social Coding Club at the University of Minnesota
 
 I haven't connected backend to frontend yet. 
 Assuming that nobody has experience using react or node.js, start with these commands 
