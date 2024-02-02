@@ -1,33 +1,88 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
 
+function App() {
+  const [newMajor, setNewMajor] = useState('') //useState() is fundamental to React
+  const [newMinor, setNewMinor] = useState('')
+  const [majors, setMajors] = useState<string[]>([]) //"<string[]>" is typescript
+  const [minors, setMinors] = useState<string[]>([]) 
+  
+//Method 1 for defining a function (regular function)
+  function handleMajorChange (event: any){ //": any" is typescript
+    /*
+    handleMajorChange is linked to the onChange attribute in the html input tag.
+    Consider event.target.value, the event here is when we type something into the 
+    input. target.value is syntax that tells the computer to hold onto whatever is
+    typed into input.
+    */
+    setNewMajor(event.target.value) 
+    console.log(newMajor) //If you open developer tool, for me the shortcut is ctrl + shift + j, 
+    //you will see whats happening
+  }
+  function handleMinorChange (event: any){
+    setNewMinor(event.target.value)
+    console.log(newMinor)
+  }
+//Method 2 of defining a function (arrow function)
+  const addMajor = (event: any) => {
+    event.preventDefault();
+    setMajors([...majors, newMajor]); // "...major" creates a copy of what we currently have stored in majors
+    setNewMajor(''); //clears input after submit
+    console.log(majors)
+  };
+
+  const addMinor = (event: any) => {
+    event.preventDefault();
+    setMinors([...minors, newMinor]);
+    setNewMinor('');
+    console.log(minors)
+  };
+
+  //Use curly braces to write javascript inside of a html tag.
+  //The built-in map function returns a copy of your array after modifications
+  //For example, [1, 2, 3].map(e => e + 1) returns [2, 3, 4].
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <> 
+      <h1>Hello World</h1>
+      <table className="container">
+        <tr>
+          <th>Majors</th>
+          <th>Minors</th>
+        </tr>
+
+        <td>
+          <ul>
+            {majors.map(major => <li>{major}</li>)} 
+          </ul>
+        </td>
+
+        <td>
+          <ul>
+            {minors.map(minor => <li>{minor}</li>)}
+          </ul>
+        </td>
+
+      </table>
+  
+      <form onSubmit={addMajor}>
+        <div > 
+          Add a Major: <input value={newMajor} onChange={handleMajorChange} id="majorInput" />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+
+      <form onSubmit={addMinor}>
+        <div>
+          Add a Minor: <input value={newMinor} onChange={handleMinorChange} />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+
     </>
   )
 }

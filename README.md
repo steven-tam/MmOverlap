@@ -16,3 +16,6 @@ To run backend
 2. cd backend
 3. npm start
 3. Go to http://localhost:3001/
+
+
+The only files you want to pay attention to are App.css and App.tsx.
