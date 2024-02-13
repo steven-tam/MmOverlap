@@ -1,13 +1,40 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
+
 
 
 function App() {
   const [newMajor, setNewMajor] = useState('') //useState() is fundamental to React
   const [newMinor, setNewMinor] = useState('')
   const [majors, setMajors] = useState<string[]>([]) //"<string[]>" is typescript
-  const [minors, setMinors] = useState<string[]>([]) 
+  const [minors, setMinors] = useState<string[]>([])
+  const [allData, setAllData] = useState([])
+
+  //For Reference
+  // function exportDogs() {
+  //   const schoolId = 'umn_umntc_peoplesoft'
+  //   let subject = ''
+  //   let subjectCode = (subject == 'allCourses') ? '' : 'subjectCode=' + subject
+  //   let fileName = subject + '.json'
+  //   let filePath = './Dog/'
+  //   // let filePath = './'
+  //   let returnFields = '&returnFields=subjectCode,courseNumber,name,description' // preq is at the end of description
+  //   let limit = '&limit=infinity'
+
+
+
+  //Fetches data from url. Converts the response into a json object. Prints to console
+    let url = 'https://app.coursedog.com/api/v1/cm/' + 'umn_umntc_peoplesoft' + '/programs/'
+    fetch(url)
+      .then(res => res.json())
+      .then(data => console.log(data))
+
+
+
+
   
+
+
 //Method 1 for defining a function (regular function)
   function handleMajorChange (event: any){ //": any" is typescript
     /*
@@ -51,17 +78,21 @@ function App() {
           <th>Minors</th>
         </tr>
 
-        <td>
-          <ul>
-            {majors.map(major => <li>{major}</li>)} 
-          </ul>
-        </td>
+        <tr>
+          <td>
+            <ul>
+              {majors.map(major => <li>{major}</li>)} 
+            </ul>
+          </td>
+        </tr>
 
-        <td>
-          <ul>
-            {minors.map(minor => <li>{minor}</li>)}
-          </ul>
-        </td>
+        <tr>
+          <td>
+            <ul>
+              {minors.map(minor => <li>{minor}</li>)}
+            </ul>
+          </td>
+        </tr>
       </table>
   
       <form onSubmit={addMajor}>
