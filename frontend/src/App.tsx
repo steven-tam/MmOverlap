@@ -10,30 +10,6 @@ function App() {
   const [minors, setMinors] = useState<string[]>([])
   const [allData, setAllData] = useState([])
 
-  //For Reference
-  // function exportDogs() {
-  //   const schoolId = 'umn_umntc_peoplesoft'
-  //   let subject = ''
-  //   let subjectCode = (subject == 'allCourses') ? '' : 'subjectCode=' + subject
-  //   let fileName = subject + '.json'
-  //   let filePath = './Dog/'
-  //   // let filePath = './'
-  //   let returnFields = '&returnFields=subjectCode,courseNumber,name,description' // preq is at the end of description
-  //   let limit = '&limit=infinity'
-
-
-
-  //Fetches data from url. Converts the response into a json object. Prints to console
-    let url = 'https://app.coursedog.com/api/v1/cm/' + 'umn_umntc_peoplesoft' + '/programs/'
-    fetch(url)
-      .then(res => res.json())
-      .then(data => console.log(data))
-
-
-
-
-  
-
 
 //Method 1 for defining a function (regular function)
   function handleMajorChange (event: any){ //": any" is typescript
