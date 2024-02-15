@@ -38,7 +38,7 @@ function filterKey(jsonData, desiredKey, desiredValue, layerKey) {
   for (const key in jsonData) { //Enhanced loop for key values in json object
     const obj = jsonData[key]; //returns the value mapped to that key
     if (layerKey != null) { //layerKey is optional
-      if (jsonData[key][layerKey][desiredKey] == desiredValue) {
+      if (jsonData[key][layerKey][desiredKey] ==desiredValue) {
         filteredData.push(obj);
       }
     }
@@ -56,8 +56,8 @@ function filterKey(jsonData, desiredKey, desiredValue, layerKey) {
 (async () => {
   try {
     const data = await fetchData();
-    const onlyUndergrad = await filterKey(data, 'cdProgramTypeManual', 'Baccalaureate', 'customFields')
-    const jsonData = JSON.stringify(onlyUndergrad);
+    const allMajors = await filterKey(data, 'cdProgramTypeManual', 'Baccalaureate', 'customFields')
+    const jsonData = JSON.stringify(allMajors);
 
     // Write the JSON string content to a file named db.json
     fs.writeFile("db.json", jsonData, (error) => {
