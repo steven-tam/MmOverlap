@@ -31,13 +31,13 @@ function filterKey(jsonData, desiredKey, desiredValue, layerKey) {
   return filteredData;
 }
 
-// Use async/await to wait for the fetchData function to complete and then stringify the returned data
+// async/await is necessary because the data returned by fetchData() and filterKey() is too big
 (async () => {
   console.log("Writing database...")
   try {
     let url = 'https://app.coursedog.com/api/v1/cm/umn_umntc_peoplesoft/programs/';
-    const data = await fetch(url).then(response => response.json());
-    const allMajors = await filterKey(data, 'cdProgramTypeManual', 'Baccalaureate', 'customFields')
+    const data = await fetch(url).then(response => response.json()); // Waits for fetch() to complete. Parses that data into JSON
+    const allMajors = await filterKey(data, 'cdProgramTypeManual', 'Baccalaureate', 'customFields') // Waits for filterKey to complete
     const jsonData = JSON.stringify(allMajors);
 
     // Write the JSON string content to a file named db.json
@@ -53,4 +53,4 @@ function filterKey(jsonData, desiredKey, desiredValue, layerKey) {
   } catch (error) {
     console.error("Error:", error);
   }
-})(); //the extra () immediately executes the async function, so we dont have to call it.
+})(); //This is an immediately-invoked asynchronous function expression (IIFE)

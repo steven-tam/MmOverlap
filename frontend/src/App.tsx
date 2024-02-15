@@ -42,7 +42,7 @@ function App() {
     console.log(minors)
   };
 
-  //Use curly braces to write javascript inside of a html tag.
+  //Use curly braces to write javascript to a html tag.
   //The built-in map function returns a copy of your array after modifications
   //For example, [1, 2, 3].map(e => e + 1) returns [2, 3, 4].
   return (
