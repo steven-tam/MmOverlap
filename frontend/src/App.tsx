@@ -10,7 +10,7 @@ function App() {
   const [minors, setMinors] = useState<string[]>([])
   const [allData, setAllData] = useState([])
 
-
+//
 //Method 1 for defining a function (regular function)
   function handleMajorChange (event: any){ //": any" is typescript
     /*
