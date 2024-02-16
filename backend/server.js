@@ -13,7 +13,7 @@ app.get('/', (request, response) => {
   response.send("<h1>Hello World</h1>")
 })
 
-app.get('/api/db', (request, response) => {
+app.get('/api/allMajors', (request, response) => {
   // Read the content of db.json file
   fs.readFile(dbFilePath, 'utf8', (err, data) => {
     if (err) {
