@@ -18,4 +18,4 @@ To run backend
 3. Go to http://localhost:3001/
 
 
-The only files you want to pay attention to are App.css and App.tsx.
+For frontend the only files you want to pay attention to are App.css, App.tsx, ProgressPage.tsx, LandingPage.tsx, index.css, and CoursePage.tsx.
