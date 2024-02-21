@@ -2,8 +2,8 @@
  A project from Social Coding Club at the University of Minnesota
 
 I haven't connected backend to frontend yet.
-Assuming that nobody has experience using react or node.js, start with these commands 
-using gitbash or equivalent:
+Assuming that nobody has experience using react, node.js, or flask, start with these commands 
+Using gitbash or equivalent:
 
 To run frontend:
 1. cd MmOverlap
@@ -17,12 +17,12 @@ To run backend:
 3. npm start
 4. Go to http://localhost:3001/
 
-To run djbackend (django):
-Must activate virtual environment. type "deactivate" to deactive virtual environment
+To run flbackend (flask):
+YOU MUST activate virtual environment (step 2). Type "deactivate" to deactivate the virtual environment
 1. cd MmOverlap
 2. . .venv/Scripts/activate
-3. cd djbackend
-4. Py manage.py runserver
-5. Go to http://localhost:8000/
+3. cd backend-flask
+4. flask --app server run
+5. Go to http://localhost:5000/
 
-For frontend the only files you want to pay attention to are App.css, App.tsx, ProgressPage.tsx, LandingPage.tsx, index.css, and CoursePage.tsx.
+For frontend, the only files you want to pay attention to are App.css, App.tsx, ProgressPage.tsx, LandingPage.tsx, index.css, and CoursePage.tsx.
