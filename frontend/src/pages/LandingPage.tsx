@@ -5,32 +5,6 @@ function LandingPage() {
   const [newMinor, setNewMinor] = useState('')
   const [majors, setMajors] = useState<string[]>([]) //"<string[]>" is typescript
   const [minors, setMinors] = useState<string[]>([])
-  const [programs, setPrograms] = useState([
-    {
-        "major": "Computer Science B.S",
-        "prerequisite": [
-            "001",
-            "171",
-            "262"
-        ]
-    },
-    {
-        "major": "Computer Science B.A",
-        "prerequisite": [
-            "001",
-            "171",
-            "262"
-        ]
-    },
-    {
-        "major": "Accounting B.S.B",
-        "prerequisite": ["003","161","632"]
-    },
-    {
-        "major": "Biology B.A",
-        "prerequisite": ["004","161","262"]
-    }
-])
 
 
 //
