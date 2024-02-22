@@ -8,8 +8,6 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 function App() {
   return (
     <>
-<<<<<<< HEAD
-=======
       <nav>
         <ul>
           <li><a href="/">Landing Page</a></li>
@@ -17,11 +15,6 @@ function App() {
           <li><a href="/progress-report">Progress Report</a></li>
         </ul>
       </nav>
-        
-<<<<<<< HEAD
->>>>>>> parent of 19c0f60 (Added dummy data for pages)
-=======
->>>>>>> parent of 19c0f60 (Added dummy data for pages)
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
