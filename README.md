@@ -11,13 +11,7 @@ To run frontend:
 3. npm run dev
 4. Go to http://localhost:5173/
 
-To run backend:
-1. cd MmOverlap
-2. cd backend
-3. npm start
-4. Go to http://localhost:3001/
-
-To run flbackend (flask):
+To run backend-flask:
 YOU MUST activate the virtual environment (step 2). Type "deactivate" to deactivate the virtual environment
 1. cd MmOverlap
 2. . .venv/Scripts/activate
