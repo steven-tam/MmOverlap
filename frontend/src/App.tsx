@@ -15,6 +15,7 @@ function App() {
           <li><a href="/progress-report">Progress Report</a></li>
         </ul>
       </nav>
+        
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
