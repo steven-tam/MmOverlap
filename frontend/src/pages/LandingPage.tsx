@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
 function LandingPage() {
+  //Never mutate states. You always want to set the state to a copy with the changes you want
   const [newMajor, setNewMajor] = useState('') //useState() is fundamental to React
   const [newMinor, setNewMinor] = useState('')
   const [majors, setMajors] = useState<string[]>([]) //"<string[]>" is typescript
   const [minors, setMinors] = useState<string[]>([])
-
 
 //
 //Method 1 for defining a function (regular function)
