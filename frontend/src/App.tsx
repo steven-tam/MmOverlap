@@ -18,6 +18,9 @@ function App() {
         </ul>
       </nav>
         
+<<<<<<< HEAD
+>>>>>>> parent of 19c0f60 (Added dummy data for pages)
+=======
 >>>>>>> parent of 19c0f60 (Added dummy data for pages)
         <BrowserRouter>
           <Routes>
