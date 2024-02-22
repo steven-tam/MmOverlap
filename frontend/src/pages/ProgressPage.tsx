@@ -19,11 +19,11 @@ function ProgressPage() {
     "courses": ["021","022","023"]
 }
 ])
-  return (
-    <> 
-      <h1>Progress Page</h1>
-    </>
-  )
+return (
+  <> 
+    <h1>Progress Page</h1>
+  </>
+)
 }
 
 

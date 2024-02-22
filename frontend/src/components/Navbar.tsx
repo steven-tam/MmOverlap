@@ -6,8 +6,9 @@ const Navbar = () => {
       <nav>
         <ul>
           <li><a href="/">Landing Page</a></li>
-          <li><a href="/your-courses">Select Courses</a></li>
-          <li><a href="/progress-report">Progress Report</a></li>
+          <li><a href="/selectCourses">Select Courses</a></li>
+          <li><a href="/showProgress">Progress Report</a></li>
+          <li><a href="/example">Example</a></li>
         </ul>
       </nav>
     </div>

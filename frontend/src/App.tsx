@@ -3,6 +3,7 @@ import './App.css'
 import LandingPage from './pages/LandingPage'
 import CoursePage from './pages/CoursePage'
 import ProgressPage from './pages/ProgressPage'
+import ExamplePage from './pages/ExamplePage'
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
@@ -14,8 +15,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="your-courses" element={<CoursePage />} />
-          <Route path="progress-report" element={<ProgressPage />} />
+          <Route path="selectCourses" element={<CoursePage />} />
+          <Route path="showProgress" element={<ProgressPage />} />
+          <Route path="Example" element={<ExamplePage />} />
         </Routes>
       </BrowserRouter>
       <Footer />
