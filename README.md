@@ -3,7 +3,7 @@
 
 I haven't connected backend to frontend yet.
 Assuming that nobody has experience using react, node.js, or flask, start with these commands 
-Using gitbash or equivalent:
+using gitbash or equivalent:
 
 To run frontend:
 1. cd MmOverlap
