@@ -8,13 +8,6 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 function App() {
   return (
     <>
-      <nav>
-        <ul>
-          <li><a href="/">Landing Page</a></li>
-          <li><a href="/your-courses">Select Courses</a></li>
-          <li><a href="/progress-report">Progress Report</a></li>
-        </ul>
-      </nav>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />

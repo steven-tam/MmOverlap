@@ -1,4 +1,4 @@
-# Gopher Major Planner
+# MmOverlap --> Gopher Major Planner
  A project from Social Coding Club at the University of Minnesota
 
 I haven't connected backend to frontend yet.
