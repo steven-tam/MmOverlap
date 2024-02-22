@@ -18,7 +18,7 @@ To run backend:
 4. Go to http://localhost:3001/
 
 To run flbackend (flask):
-YOU MUST activate virtual environment (step 2). Type "deactivate" to deactivate the virtual environment
+YOU MUST activate the virtual environment (step 2). Type "deactivate" to deactivate the virtual environment
 1. cd MmOverlap
 2. . .venv/Scripts/activate
 3. cd backend-flask
