@@ -47,8 +47,8 @@ const ExamplePage = () => {
      <h1>Example Page</h1>
      <table className="container">
        <tr>
-         <th>Majors</th>
-         <th>Minors</th>
+         <th align = "left">Majors</th>
+         <th align = "left">Minors</th>
        </tr>
 
        <tr>
@@ -57,15 +57,13 @@ const ExamplePage = () => {
              {majors.map(major => <li>{major}</li>)} 
            </ul>
          </td>
+          <td>
+            <ul>
+              {minors.map(minor => <><li>{minor}</li></>)}
+            </ul>
+          </td>
        </tr>
 
-       <tr>
-         <td>
-           <ul>
-             {minors.map(minor => <li>{minor}</li>)}
-           </ul>
-         </td>
-       </tr>
      </table>
  
      <form onSubmit={addMajor}>
