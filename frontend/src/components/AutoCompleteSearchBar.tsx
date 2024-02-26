@@ -1,14 +1,11 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
-import all from "../../db.json";
+import all_progs from "../../../backend-flask/allMajors.json";
 
 type Program = {
   ind: number; // Index in search bar, see handleProgramClick / handleKeyDown
-  major: string;
-  courses: string[];
+  longName: string;
 };
-
-const raw = all.foo; // Extracted from dummy data in db.json
 
 export default function AutoCompleteSearchBar() {
   const [query, setQuery] = useState(""); // Makes space bar appear with user inpu
@@ -18,7 +15,7 @@ export default function AutoCompleteSearchBar() {
   // Only used to "tell" the search bar what programs there are, setPrograms slightly deceivng
   const [programs, setPrograms] = useState<Program[]>([]);
   useEffect(() => {
-    setPrograms(raw as Program[]); // Type cast dummy data as a program
+    setPrograms(all_progs as Program[]); // Type cast dummy data as a program
   }, []);
 
   // Used to take user data from search bar input
@@ -30,7 +27,9 @@ export default function AutoCompleteSearchBar() {
     setSearchResults(
       programs.filter(
         (program) =>
-          program.major.toLowerCase().includes(event.target.value.toLowerCase()) // Filters search results accordingly
+          program.longName
+            .toLowerCase()
+            .includes(event.target.value.toLowerCase()) // Filters search results accordingly
       )
     );
   }
@@ -47,13 +46,12 @@ export default function AutoCompleteSearchBar() {
         // If prevIndex is -1, set selected program index to last element, else go down
         prevIndex === searchResults.length - 1 ? -1 : prevIndex + 1
       );
-
     } else if (event.key === "Enter") {
       if (selectedProgramIndex !== -1) {
         // Uses index attribute to locate the program selected
         // No functionality with backend as of now, does not send anything
         const selectedProgram = searchResults[selectedProgramIndex];
-        alert(`You selected ${selectedProgram.major}`);
+        alert(`You selected ${selectedProgram.longName}`);
 
         // Returns to default search after selection
         setQuery("");
@@ -66,7 +64,7 @@ export default function AutoCompleteSearchBar() {
   // Allows the user to click element to select
   function handleProgramClick(program: Program) {
     // No functionality with backend as of now, does not send anything
-    alert(`You selected ${program.major}`);
+    alert(`You selected ${program.longName}`);
 
     // Returns to default search after selection
     setQuery("");
