@@ -4,7 +4,7 @@ import { useEffect } from "react"
 
 type Program = {
     ind: number
-    longName: string
+    catalogDisplayName: string
 }
 
 type ProgramListProps= {
@@ -39,7 +39,7 @@ export default function ProgramLists({programs, selectedProgramIndex, handleProg
                 <div key={program.ind} className={`${selectedProgramIndex === index ? "bg-gray-200" : ""} py-2 px-4 flex items-center justify-between gap-8 hover:bg-gray-200 cursor-pointer`}
                 id={`program-${index}`}
                 onClick={() => handleProgramClick(program)}>
-                    <p>{program.longName}</p>
+                    <p>{program.catalogDisplayName}</p>
                 </div>
             ))}
         </div>

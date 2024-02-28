@@ -4,7 +4,7 @@ import all_progs from "../../../backend-flask/allMajors.json";
 
 type Program = {
   ind: number; // Index in search bar, see handleProgramClick / handleKeyDown
-  longName: string;
+  catalogDisplayName: string;
 };
 
 export default function AutoCompleteSearchBar() {
@@ -27,7 +27,7 @@ export default function AutoCompleteSearchBar() {
     setSearchResults(
       programs.filter(
         (program) =>
-          program.longName
+          program.catalogDisplayName
             .toLowerCase()
             .includes(event.target.value.toLowerCase()) // Filters search results accordingly
       )
@@ -51,7 +51,7 @@ export default function AutoCompleteSearchBar() {
         // Uses index attribute to locate the program selected
         // No functionality with backend as of now, does not send anything
         const selectedProgram = searchResults[selectedProgramIndex];
-        alert(`You selected ${selectedProgram.longName}`);
+        alert(`You selected ${selectedProgram.catalogDisplayName}`);
 
         // Returns to default search after selection
         setQuery("");
@@ -64,7 +64,7 @@ export default function AutoCompleteSearchBar() {
   // Allows the user to click element to select
   function handleProgramClick(program: Program) {
     // No functionality with backend as of now, does not send anything
-    alert(`You selected ${program.longName}`);
+    alert(`You selected ${program.catalogDisplayName}`);
 
     // Returns to default search after selection
     setQuery("");
