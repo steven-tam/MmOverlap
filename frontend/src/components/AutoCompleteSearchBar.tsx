@@ -1,6 +1,9 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
 import all_progs from "../../../backend-flask/allMajors.json";
+import prog_names from "../../../backend-flask/programNames.json";
+import { Navigate, useNavigate, redirect } from "react-router-dom";
+
 
 type Program = {
   ind: number; // Index in search bar, see handleProgramClick / handleKeyDown
@@ -20,6 +23,9 @@ export default function AutoCompleteSearchBar() {
 
   // Used to take user data from search bar input
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Used to navigate to different pages conditionally
+  const nav = useNavigate();
 
   // Handles search bar input / changes
   function handleQueryChange(event: ChangeEvent<HTMLInputElement>) {
@@ -51,10 +57,9 @@ export default function AutoCompleteSearchBar() {
         // Uses index attribute to locate the program selected
         // No functionality with backend as of now, does not send anything
         const selectedProgram = searchResults[selectedProgramIndex];
-        alert(`You selected ${selectedProgram.catalogDisplayName}`);
 
         // Returns to default search after selection
-        setQuery("");
+        setQuery(selectedProgram.catalogDisplayName);
         setSelectedProgramIndex(-1);
         setSearchResults([]);
       }
@@ -63,16 +68,27 @@ export default function AutoCompleteSearchBar() {
 
   // Allows the user to click element to select
   function handleProgramClick(program: Program) {
-    // No functionality with backend as of now, does not send anything
-    alert(`You selected ${program.catalogDisplayName}`);
-
     // Returns to default search after selection
-    setQuery("");
+    setQuery(program.catalogDisplayName);
     setSearchResults([]);
+  }
+
+  // Redirects user to course selection page once a valid major is entered
+  function coursePageRedirect(program_name: string){
+    const string_names = (prog_names as string[])
+
+    for(let i = 0; i < string_names.length; i++){
+      if(program_name == string_names[i]){
+        sessionStorage.setItem("program_selected", program_name)
+        nav("/selectCourses")
+        location.reload()
+      }
+    }
   }
 
   return (
     <div className="flex flex-col max-w-lg mx-auto mt-20">
+      <div>
       <input
         type="text"
         className="px-4 py-1 border-gray-500 
@@ -90,6 +106,11 @@ export default function AutoCompleteSearchBar() {
           handleProgramClick={handleProgramClick}
         />
       )}
+        <button 
+          // When enter clicked, redirect to course page
+          onClick={()=> coursePageRedirect(query)}
+        >Enter</button>
+      </div>
     </div>
   );
 }
