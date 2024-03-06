@@ -40,7 +40,7 @@ const ExamplePage = () => {
  };
 
  //Use curly braces to write javascript to a html tag.
- //The built-in map function returns a copy of your array after modifications
+ //The built-in map function returns a copy of your array after some modification
  //For example, [1, 2, 3].map(e => e + 1) returns [2, 3, 4].
  return (
    <> 
