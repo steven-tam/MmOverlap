@@ -1,7 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
-import all_progs from "../../../backend-flask/allMajors.json";
-import prog_names from "../../../backend-flask/programNames.json";
+import all_progs from "../../../backend/data/allMajors.json";
+import prog_names from "../../../backend/data/programNames.json";
 import { Navigate, useNavigate, redirect } from "react-router-dom";
 
 

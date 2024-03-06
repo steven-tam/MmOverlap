@@ -11,12 +11,11 @@ To run frontend:
 3. npm run dev
 4. Go to http://localhost:5173/
 
-To run backend-flask:
-YOU MUST activate the virtual environment (step 2). Type "deactivate" to deactivate the virtual environment
+To run backend:
 1. cd MmOverlap
-2. . .venv/Scripts/activate
-3. cd backend-flask
-4. flask run
-5. Go to http://localhost:5000/
+2. cd backend
+3. npm run dev
+or npm start
+4. Go to http://localhost:3001/
 
 For frontend, the only files you want to pay attention to are App.css, Navbar.tsx, Footer.tsx, ProgressPage.tsx, LandingPage.tsx, CoursePage.tsx, and index.css
