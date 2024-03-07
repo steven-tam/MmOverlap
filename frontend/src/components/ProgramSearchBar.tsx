@@ -18,7 +18,7 @@ export default function AutoCompleteSearchBar() {
   // Only used to "tell" the search bar what programs there are, setPrograms slightly deceivng
   const [programs, setPrograms] = useState<Program[]>([]);
   useEffect(() => {
-    setPrograms(all_progs as Program[]); // Type cast dummy data as a program
+    setPrograms(all_progs as Program[]); // Type cast data as a program
   }, []);
 
   // Used to take user data from search bar input
