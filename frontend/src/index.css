@@ -19,7 +19,7 @@
 
 a {
   font-weight: 500;
-  color: rgb(122, 0, 25);
+  color: rgb(144, 0, 33);
   text-decoration: inherit;
 }
 a:hover {
@@ -51,7 +51,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: rgb(255, 204, 51);
+  border-color: gb(255, 222, 122);
 }
 button:focus,
 button:focus-visible {
