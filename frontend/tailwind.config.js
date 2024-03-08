@@ -10,6 +10,7 @@ export default {
         'light-gold': '#ffde7a',
         'light-maroon': '#900021',
         'gopher-maroon': '#7a0019',
+        'github-black': '#1B1F23',
         
       },
       keyframes: {
