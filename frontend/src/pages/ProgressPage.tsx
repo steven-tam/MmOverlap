@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 function ProgressPage() {
-  //Never mutate states. You always want to set the state to a copy with the changes you want
   const [example, setExample] = useState([{
     "major": "Computer Science B.S",
     "courses": ["001","002","003"]

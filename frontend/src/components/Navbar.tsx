@@ -1,4 +1,4 @@
-import logo from '../assets/gmplogo.svg'
+import logo from '../assets/logo2.svg'
 import { useState } from 'react'
 import {Squash as Hamburger} from 'hamburger-react'
 

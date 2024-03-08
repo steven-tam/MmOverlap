@@ -1,33 +1,56 @@
 import React from 'react'
+import LeadDevCard from './LeadDevCard'
 import DevCard from './DevCard'
 const Footer = () => {
   return (
     <div className="border-t">
       <div className="flex flex-col md:flex-row justify-center gap-2">
-        <DevCard name="person1" 
-          title='Software' 
+        <LeadDevCard name="Steven Tam" 
+          title='Website/Team Lead' 
           image='https://picsum.photos/200' 
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'
           />
-        <DevCard 
-          name="person2" 
-          title='Software' 
+        <LeadDevCard 
+          name="Sam" 
+          title='Frontend Lead' 
           image='https://picsum.photos/200'
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'
         />
-        <DevCard 
-          name="person3" 
-          title='Software' 
+        <LeadDevCard 
+          name='Benat' 
+          title='Data Science Lead' 
           image='https://picsum.photos/200'
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'
         />
       </div>
+      <p className='text-center text-gray-500 underline text-xl'>Developers</p>
+      <div className="flex flex-col md:flex-row justify-center gap-2">
+        <DevCard
+          name='person4'
+          image='https://picsum.photos/200'
+          githubLink='#' 
+          portfolioLink='#'
+          linkedinLink='#'
+        />
+        <DevCard
+          name='person5'
+          image='https://picsum.photos/200'
+          githubLink='#' 
+          portfolioLink='#'
+          linkedinLink='#'
+        />
+      
+      </div>
+      
+        <p className='text-center text-gray-400'>
+          Gopher Major Planner is supported by <a href="https://www.socialcoding.net/" target="_blank" className="hover:underline">Social Coding Club</a> with data from Summer 2017 to Fall 2023 provided by the <a href="https://idr.umn.edu/" target="_blank" className="hover:underline">Office of Institutional Data and Research</a>
+        </p>
       <footer className="rounded-lg shadow m-4 dark:bg-gray-800">
         <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 
