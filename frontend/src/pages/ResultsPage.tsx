@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-function ProgressPage() {
+function ResultsPage() {
   const [example, setExample] = useState([{
     "major": "Computer Science B.S",
     "courses": ["001","002","003"]
@@ -20,10 +20,10 @@ function ProgressPage() {
 ])
 return (
   <> 
-    <h1>Progress Page</h1>
+    <h1>Results/Analysis Page</h1>
   </>
 )
 }
 
 
-export default ProgressPage
+export default ResultsPage

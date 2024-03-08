@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import LandingPage from './pages/LandingPage'
 import CoursePage from './pages/CoursePage'
-import ProgressPage from './pages/ProgressPage'
+import ResultsPage from './pages/ResultsPage'
 import ExamplePage from './pages/ExamplePage'
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Footer from './components/Footer'
@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="selectCourses" element={<CoursePage />} />
-          <Route path="showProgress" element={<ProgressPage />} />
+          <Route path="showProgress" element={<ResultsPage />} />
           <Route path="Example" element={<ExamplePage />} />
         </Routes>
       </BrowserRouter>

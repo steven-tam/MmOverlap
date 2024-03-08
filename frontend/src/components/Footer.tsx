@@ -28,7 +28,6 @@ const Footer = () => {
           portfolioLink='#'
           linkedinLink='#'
         />
-        
       </div>
       
       <div className="flex flex-col md:flex-row justify-center gap-4">
@@ -60,12 +59,11 @@ const Footer = () => {
           portfolioLink='#'
           linkedinLink='#'
         />
-      
       </div>
       
-        <p className='text-center text-gray-400'>
-          Gopher Major Planner is supported by <a href="https://www.socialcoding.net/" target="_blank" className="hover:underline">Social Coding Club</a> with data from Summer 2017 to Fall 2023 provided by the <a href="https://idr.umn.edu/" target="_blank" className="hover:underline">Office of Institutional Data and Research</a>
-        </p>
+      <p className='text-center text-gray-400'>
+        Gopher Major Planner uses data from Summer 2017 to Fall 2023 provided by the <a href="https://idr.umn.edu/" target="_blank" className="hover:underline">Office of Institutional Data and Research</a>
+      </p>
       <footer className="rounded-lg shadow m-4 dark:bg-gray-800">
         <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 
@@ -79,10 +77,10 @@ const Footer = () => {
                   <a href="#" className="hover:underline me-4 md:me-6">Privacy Policy</a>
               </li>
               <li>
-                  <a href="https://umn.lol/" target="_blank" className="hover:underline me-4 md:me-6">Gopher Grades</a>
+                  <a href="https://www.socialcoding.net/" target="_blank" className="hover:underline me-4 md:me-6">Social Coding Club</a>
               </li>
               <li>
-                  <a href="#" className="hover:underline">Contact</a>
+                  <a href="https://umn.lol/" target="_blank" className="hover:underline">Gopher Grades</a>
               </li>
           </ul>
         </div>
