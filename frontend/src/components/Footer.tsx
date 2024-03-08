@@ -31,7 +31,6 @@ const Footer = () => {
         
       </div>
       
-      <p className='text-center text-gray-500 underline text-xl'>Developers</p>
       <div className="flex flex-col md:flex-row justify-center gap-4">
         <DevCard
           name='person4'

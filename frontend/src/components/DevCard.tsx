@@ -17,6 +17,7 @@ function DevCard({name, image, linkedinLink ,githubLink, portfolioLink}: Profile
             <div>
               <img className="w-24 h-24 rounded-full mx-auto border-4 border-light-gold hover:animate-bounce-twice" src={image} alt="Profile picture" title={name} />
               <h2 className="text-center text-2xl font-semibold mt-3 text-light-maroon">{name}</h2>
+              <p className="text-center text-gray-600 mt-1">Developer</p>
               <div className="flex justify-center mt-3">
                 <a href={linkedinLink} className="mx-2 text-github-black hover:underline hover:text-github-black"><img src={linkedinIcon} alt='Linkedin'></img></a>
                 <a href={githubLink} className="mx-2 text-github-black hover:underline hover:text-github-black"><img src={githubIcon} alt='Github'></img></a>
