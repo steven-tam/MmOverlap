@@ -4,7 +4,10 @@ import { useEffect } from "react"
 
 type Program = {
     ind: number
-    catalogDisplayName: string
+    catalogDisplayName: string;
+    customFields:{
+        cdProgramDescr: string;
+      };
 }
 
 type ProgramListProps= {

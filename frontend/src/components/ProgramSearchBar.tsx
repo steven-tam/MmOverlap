@@ -1,5 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
+import ProgramDescription from "./ProgramDescription";
 import all_progs from "../../../backend/data/allMajors.json";
 import prog_names from "../../../backend/data/programNames.json";
 import { Navigate, useNavigate, redirect } from "react-router-dom";
@@ -8,13 +9,16 @@ import { Navigate, useNavigate, redirect } from "react-router-dom";
 type Program = {
   ind: number; // Index in search bar, see handleProgramClick / handleKeyDown
   catalogDisplayName: string;
+  customFields:{
+    cdProgramDescr: string;
+  };
 };
 
 export default function AutoCompleteSearchBar() {
   const [query, setQuery] = useState(""); // Makes space bar appear with user inpu
   const [searchResults, setSearchResults] = useState<Program[]>([]); // Displays / renders search results
   const [selectedProgramIndex, setSelectedProgramIndex] = useState<number>(-1); // Tracks selected index for display / selection
-
+  const [programDescription, setProgramDescription] = useState<string>('');
   // Only used to "tell" the search bar what programs there are, setPrograms slightly deceivng
   const [programs, setPrograms] = useState<Program[]>([]);
   useEffect(() => {
@@ -32,7 +36,7 @@ export default function AutoCompleteSearchBar() {
     setQuery(event.target.value);
     setSearchResults(
       programs.filter(
-        (program) =>
+        (program) => 
           program.catalogDisplayName
             .toLowerCase()
             .includes(event.target.value.toLowerCase()) // Filters search results accordingly
@@ -70,6 +74,7 @@ export default function AutoCompleteSearchBar() {
   function handleProgramClick(program: Program) {
     // Returns to default search after selection
     setQuery(program.catalogDisplayName);
+    setProgramDescription(program.customFields.cdProgramDescr)
     setSearchResults([]);
   }
 
@@ -87,30 +92,37 @@ export default function AutoCompleteSearchBar() {
   }
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto mt-20">
-      <div>
-      <input
-        type="text"
-        className="px-4 py-1 border-gray-500 
-            shadow-sm focus:outline-none focus:ring-2 focus:border-blue-500"
-        onChange={handleQueryChange}
-        onKeyDown={handleKeyDown}
-        value={query}
-        ref={inputRef}
-        placeholder="Search programs"
-      />
-      {query !== "" && searchResults.length > 0 && (
-        <ProgramLists
-          programs={searchResults}
-          selectedProgramIndex={selectedProgramIndex}
-          handleProgramClick={handleProgramClick}
-        />
-      )}
-        <button 
-          // When enter clicked, redirect to course page
-          onClick={()=> coursePageRedirect(query)}
-        >Enter</button>
+    <div className="flex flex-col justify center mt-6 gap-2">
+      <div className="max-w-lg mx-auto md:w-[96rem] mt-12">
+        <div className="flex">
+          <input
+            type="text"
+            className="w-full px-4 py-2 border-gray-500 h-10
+                      shadow focus:outline-none focus:ring-2 focus:border-blue-500"
+            onChange={handleQueryChange}
+            onKeyDown={handleKeyDown}
+            value={query}
+            ref={inputRef}
+            placeholder="Search programs"
+          />
+          <button
+            // When enter clicked, redirect to course page
+            onClick={() => coursePageRedirect(query)}
+            className="h-10 bg-gray-100 rounded-md ml-2"
+          >Enter
+          </button>
+        </div>
+
+        {query !== "" && searchResults.length > 0 && (
+          <ProgramLists
+            programs={searchResults}
+            selectedProgramIndex={selectedProgramIndex}
+            handleProgramClick={handleProgramClick}
+          />
+        )}
       </div>
+      <ProgramDescription description={programDescription} />
+
     </div>
   );
 }

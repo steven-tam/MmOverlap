@@ -19,9 +19,9 @@ function ResultsPage() {
 }
 ])
 return (
-  <> 
+  <div> 
     <h1>Results/Analysis Page</h1>
-  </>
+  </div>
 )
 }
 

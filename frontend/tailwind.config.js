@@ -11,6 +11,7 @@ export default {
         'light-maroon': '#900021',
         'gopher-maroon': '#7a0019',
         'github-black': '#1B1F23',
+        'blueish-black': '#213547',
         
       },
       keyframes: {
