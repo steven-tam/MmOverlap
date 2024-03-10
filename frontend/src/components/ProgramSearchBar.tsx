@@ -18,7 +18,7 @@ export default function AutoCompleteSearchBar() {
   const [query, setQuery] = useState(""); // Makes space bar appear with user inpu
   const [searchResults, setSearchResults] = useState<Program[]>([]); // Displays / renders search results
   const [selectedProgramIndex, setSelectedProgramIndex] = useState<number>(-1); // Tracks selected index for display / selection
-  const [programDescription, setProgramDescription] = useState<string>('');
+  const [programDescription, setProgramDescription] = useState<string>(''); // // Stores cdProgramDescr for chosen program
   // Only used to "tell" the search bar what programs there are, setPrograms slightly deceivng
   const [programs, setPrograms] = useState<Program[]>([]);
   useEffect(() => {
@@ -90,9 +90,9 @@ export default function AutoCompleteSearchBar() {
       }
     }
   }
-  //w-full px-4 py-2 border-gray-500 h-10 shadow focus:outline-none focus:ring-2 focus:border-blue-500 rounded
+
   return (
-    <div className="flex flex-col justify center mt-6 gap-4">
+    <div className="flex flex-col justify-center mt-6 mb-6 gap-4">
       <div className="max-w-lg mx-auto md:w-[96rem] mt-20 mb-28">
         <div className="flex relative">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -102,7 +102,7 @@ export default function AutoCompleteSearchBar() {
             </div>
             <input
               type="text"
-              className="w-full px-4 py-2 ps-10 border-gray-500 h-10 shadow focus:outline-none focus:ring-2 focus:border-blue-500 rounded"
+              className="w-full px-4 py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:border-blue-500 rounded"
               onChange={handleQueryChange}
               onKeyDown={handleKeyDown}
               value={query}
@@ -112,7 +112,7 @@ export default function AutoCompleteSearchBar() {
           <button
             // When enter clicked, redirect to course page
             onClick={() => coursePageRedirect(query)}
-            className="h-10 bg-gray-100 rounded-md ml-2"
+            className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
           >Enter
           </button>
         </div>
