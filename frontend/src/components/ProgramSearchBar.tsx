@@ -1,6 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
-import ProgramDescription from "./ProgramDescription";
+import ShowDescription from "./ShowDescription";
 import all_progs from "../../../backend/data/allMajors.json";
 import prog_names from "../../../backend/data/programNames.json";
 import { Navigate, useNavigate, redirect } from "react-router-dom";
@@ -95,11 +95,13 @@ export default function AutoCompleteSearchBar() {
     <div className="flex flex-col justify-center mt-6 mb-6 gap-4">
       <div className="max-w-lg mx-auto md:w-[96rem] mt-20 mb-28">
         <div className="flex relative">
+          
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                 </svg>
             </div>
+            
             <input
               type="text"
               className="w-full px-4 py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:border-blue-500 rounded"
@@ -107,13 +109,14 @@ export default function AutoCompleteSearchBar() {
               onKeyDown={handleKeyDown}
               value={query}
               ref={inputRef}
-              placeholder="Enter Your Major"
+              placeholder="Select Your Major"
             />
+
           <button
             // When enter clicked, redirect to course page
             onClick={() => coursePageRedirect(query)}
-            className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
-          >Enter
+            className="h-10 bg-gray-100 rounded-md ml-2 shadow-md relative"
+          >Next
           </button>
         </div>
 
@@ -126,7 +129,7 @@ export default function AutoCompleteSearchBar() {
         )}
       </div>
 
-      <ProgramDescription description={programDescription} />
+      <ShowDescription description={programDescription} />
     </div>
   );
 }

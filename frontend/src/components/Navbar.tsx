@@ -6,7 +6,7 @@ const Navbar = () => {
   const [toggle, setToggle] = useState<boolean>(false) // Menu is closed by default
   
   return (
-    <div className = "md:w-auto md:max-w-[1280px] h-[60px] bg-white border-b">
+    <div className = "mt-1 md:w-auto md:max-w-[1280px] h-[60px] bg-white border-b">
       <div className='flex justify-between'>
         <Hamburger label="Show menu" direction="right" toggled={toggle} toggle={setToggle} />
         <div className='md:max-w-[1080px] max-w-[600px] m-auto w-full h-full flex justify-center items-center'>
@@ -23,7 +23,6 @@ const Navbar = () => {
         </ul>
       </nav>
      
-
     </div>
   )
 }

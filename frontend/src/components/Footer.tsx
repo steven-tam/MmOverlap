@@ -31,6 +31,7 @@ const Footer = () => {
       </div>
       
       <div className="flex flex-col md:flex-row justify-center gap-4">
+        
         <DevCard
           name='person4'
           image='https://picsum.photos/200'
@@ -38,27 +39,7 @@ const Footer = () => {
           portfolioLink='#'
           linkedinLink='#'
         />
-        <DevCard
-          name='person5'
-          image='https://picsum.photos/200'
-          githubLink='#' 
-          portfolioLink='#'
-          linkedinLink='#'
-        />
-        <DevCard
-          name='person6'
-          image='https://picsum.photos/200'
-          githubLink='#' 
-          portfolioLink='#'
-          linkedinLink='#'
-        />
-        <DevCard
-          name='person7'
-          image='https://picsum.photos/200'
-          githubLink='#' 
-          portfolioLink='#'
-          linkedinLink='#'
-        />
+
       </div>
       
       <p className='text-center text-gray-400'>

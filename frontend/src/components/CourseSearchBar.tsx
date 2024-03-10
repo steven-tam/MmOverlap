@@ -10,7 +10,13 @@ type Course = {
   code: string; // Course code
 };
 
-export default function AutoCompleteSearchBar() {
+type prop = {
+  selectedProgram: string;
+}
+
+
+
+export default function AutoCompleteSearchBar({selectedProgram}: prop) {
   const [query, setQuery] = useState(""); // Makes space bar appear with user input
   const [searchResults, setSearchResults] = useState<Course[]>([]); // Displays / renders search results
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(-1); // Tracks selected index for display / selection
@@ -120,41 +126,54 @@ export default function AutoCompleteSearchBar() {
   }
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto mt-20">
-      <div>
+    <div className="flex flex-col justify-center mt-6 mb-6 gap-4">
+      <div className="max-w-lg mx-auto md:w-[96rem] mt-20 mb-28">
+        <div className="flex relative">
 
-      <div className="bg-white max-h-96 overflow-y-scroll">
-        {selections.map((selection) => (
-          <div>
-            <p className="py-2 px-4 flex items-center justify-between gap-8 hover:bg-gray-200 cursor-pointer">
-              {selection}
-            </p>
-            <button onClick={() => removeSelection(selection)}>X</button>
+          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+              </svg>
           </div>
-        ))}
+
+          <input
+            type="text"
+            className="w-full px-4 py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:border-blue-500 rounded"
+            onChange={handleQueryChange}
+            onKeyDown={handleKeyDown}
+            value={query}
+            ref={inputRef}
+            placeholder={`Add Completed/In-Progress Courses for ${selectedProgram}`}
+          />
+          <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
+              // Does nothing right now
+            >Next</button>
+        </div>
+
+        {query !== "" && searchResults.length > 0 && (
+            <CourseLists
+              courses={searchResults}
+              selectedCourseIndex={selectedCourseIndex}
+              handleCourseClick={handleCourseClick}
+            />
+          )}
       </div>
 
-      <input
-        type="text"
-        className="px-4 py-1 border-gray-500 
-            shadow-sm focus:outline-none focus:ring-2 focus:border-blue-500"
-        onChange={handleQueryChange}
-        onKeyDown={handleKeyDown}
-        value={query}
-        ref={inputRef}
-        placeholder="Search courses"
-      />
-      {query !== "" && searchResults.length > 0 && (
-        <CourseLists
-          courses={searchResults}
-          selectedCourseIndex={selectedCourseIndex}
-          handleCourseClick={handleCourseClick}
-        />
-      )}
+      <div className="flex flex-col justify-center items-center">
+        <p className="text-gray-400 text-center mb-2">hint: click to delete from your courses :)</p>
+        <p className="w-full md:w-8/12 text-4xl font-bold mb-1 shadow p-3 rounded">Your Courses:</p> 
+
+        <div className="w-full md:w-8/12 h-[300px] overflow-auto shadow p-3 text-lg rounded">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {selections.map((selection) => (
+              <div key={selection}>
+                <button onClick={() => removeSelection(selection)} className="w-full hover:bg-red-300 hover:border-red-300 px-8">{selection}</button>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-        <button className="mt-9"
-          // Does nothing right now
-        >Next</button>
+
     </div>
   );
 }
