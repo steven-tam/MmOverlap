@@ -33,7 +33,14 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row justify-center gap-4">
         
         <DevCard
-          name='person4'
+          name='Peiyuan'
+          image='https://picsum.photos/200'
+          githubLink='#' 
+          portfolioLink='#'
+          linkedinLink='#'
+        />
+        <DevCard
+          name='person5'
           image='https://picsum.photos/200'
           githubLink='#' 
           portfolioLink='#'

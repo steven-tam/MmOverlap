@@ -49,11 +49,16 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
 
   // Ensures a user has provided a valid code
   function checkValidCode(code: string){
-    for(let i = 0; i < course_names.length; i++){
-        if(code == course_names[i]){
-            return true;
-        }
+    let start = 0;
+    let end = course_names.length - 1;
+    while(start < end){
+      let mid = (start + end)>>1;
+      console.log(start,mid,end);
+      if(course_names[mid].localeCompare(code) == 0) return true;
+      else if(course_names[mid].localeCompare(code) < 0) start = mid + 1;
+      else end = mid - 1;
     }
+    if(course_names[start].localeCompare(code) == 0) return true;
     alert(`Invalid course!`);
     return false;
   }
