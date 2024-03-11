@@ -1,6 +1,5 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
-import ShowDescription from "./ShowDescription";
 import all_progs from "../../../backend/data/allMajors.json";
 import prog_names from "../../../backend/data/programNames.json";
 import { Navigate, useNavigate, redirect } from "react-router-dom";
@@ -116,7 +115,7 @@ export default function AutoCompleteSearchBar() {
             // When enter clicked, redirect to course page
             onClick={() => coursePageRedirect(query)}
             className="h-10 bg-gray-100 rounded-md ml-2 shadow-md relative"
-          >Next
+          >Enter
           </button>
         </div>
 
@@ -129,7 +128,11 @@ export default function AutoCompleteSearchBar() {
         )}
       </div>
 
-      <ShowDescription description={programDescription} />
+      <div>
+        <p className="text-4xl font-bold mb-1 shadow p-3 rounded">Program Description:</p> 
+        <p className="h-[300px] md:w-full overflow-auto shadow p-3 text-lg rounded">{programDescription}</p>
+      </div>
+
     </div>
   );
 }

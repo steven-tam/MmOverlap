@@ -160,7 +160,6 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
       </div>
 
       <div className="flex flex-col justify-center items-center">
-        <p className="text-gray-400 text-center mb-2">hint: click from your courses to delete a course :)</p>
         <p className="w-full md:w-8/12 text-4xl font-bold mb-1 shadow p-3 rounded">Your Courses:</p> 
 
         <div className="w-full md:w-8/12 h-[300px] overflow-auto shadow p-3 text-lg rounded">
