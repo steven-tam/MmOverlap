@@ -96,20 +96,22 @@ export default function AutoCompleteSearchBar() {
         <div className="flex relative">
           
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400 z-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                 </svg>
             </div>
             
             <input
               type="text"
-              className="w-full px-4 py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:border-blue-500 rounded"
+              id="search_bar"
+              className="w-full py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:border-blue-500 rounded peer"
               onChange={handleQueryChange}
               onKeyDown={handleKeyDown}
               value={query}
               ref={inputRef}
-              placeholder="Select Your Major"
+              placeholder="Search Majors"
             />
+            <label htmlFor="search_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Enter Your Major:</label>
 
           <button
             // When enter clicked, redirect to course page

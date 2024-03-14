@@ -136,20 +136,22 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
         <div className="flex relative">
 
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <svg className="w-4 h-4 text-gray-500 dark:text-gray-400 z-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
               </svg>
           </div>
 
           <input
             type="text"
+            id="course_bar"
             className="w-full px-4 py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:border-blue-500 rounded"
             onChange={handleQueryChange}
             onKeyDown={handleKeyDown}
             value={query}
             ref={inputRef}
-            placeholder={`Add Completed/In-Progress Courses for ${selectedProgram}`}
+            placeholder="Search Courses"
           />
+          <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses in Your Major:</label>
           <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
               // Does nothing right now
             >Next</button>
@@ -165,7 +167,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
       </div>
 
       <div className="flex flex-col justify-center items-center">
-        <p className="w-full md:w-8/12 text-4xl font-bold mb-1 shadow p-3 rounded">Your Courses:</p> 
+        <p className="w-full md:w-8/12 text-4xl font-bold mb-1 shadow p-3 rounded">{`Your Courses in ${selectedProgram}`}</p> 
 
         <div className="w-full md:w-8/12 h-[300px] overflow-auto shadow p-3 text-lg rounded">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
