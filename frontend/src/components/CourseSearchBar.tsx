@@ -76,6 +76,8 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
 
   // Allows the user to scroll list with keys / use enter to select
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    var query_1 = query.replace(" ","");
+    query_1 = query_1.toUpperCase();
     if (event.key === "ArrowUp") {
       setSelectedCourseIndex((prevIndex) =>
         // If prevIndex is -1, set selected course index to last element, else go down
@@ -100,9 +102,9 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
             setSelectedCourseIndex(-1);
             setSearchResults([]);
         }
-      } else if (checkDuplicate(query) && checkValidCode(query)){   // Case of user typing in full course code and pressing enter
+      } else if (checkDuplicate(query_1) && checkValidCode(query_1)){   // Case of user typing in full course code and pressing enter
         // NEED TO ACCOUNT FOR USER TYPING CODE IN LOWERCASE, recognize anyway
-        setSelections(selections.concat(query));
+        setSelections(selections.concat(query_1));
         setQuery("");
       }
     }
@@ -130,6 +132,12 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
     }
   }
 
+  // Redirects user to results page
+  function resultPageRedirect(){
+    nav("/showProgress")
+    location.reload()
+  }
+
   return (
     <div className="flex flex-col justify-center mt-6 mb-6 gap-4">
       <div className="max-w-lg mx-auto md:w-[96rem] mt-20 mb-28">
@@ -152,9 +160,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
             placeholder="Search Courses"
           />
           <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses in Your Major:</label>
-          <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
-              // Does nothing right now
-            >Next</button>
+          <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md" onClick={() => resultPageRedirect() }>Next</button>
         </div>
 
         {query !== "" && searchResults.length > 0 && (
