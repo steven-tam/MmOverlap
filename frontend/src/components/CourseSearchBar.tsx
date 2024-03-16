@@ -76,6 +76,8 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
 
   // Allows the user to scroll list with keys / use enter to select
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    var query_1 = query.replace(" ","");
+    query_1 = query_1.toUpperCase();
     if (event.key === "ArrowUp") {
       setSelectedCourseIndex((prevIndex) =>
         // If prevIndex is -1, set selected course index to last element, else go down
@@ -100,9 +102,9 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
             setSelectedCourseIndex(-1);
             setSearchResults([]);
         }
-      } else if (checkDuplicate(query) && checkValidCode(query)){   // Case of user typing in full course code and pressing enter
+      } else if (checkDuplicate(query_1) && checkValidCode(query_1)){   // Case of user typing in full course code and pressing enter
         // NEED TO ACCOUNT FOR USER TYPING CODE IN LOWERCASE, recognize anyway
-        setSelections(selections.concat(query));
+        setSelections(selections.concat(query_1));
         setQuery("");
       }
     }
@@ -130,6 +132,18 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
     }
   }
 
+<<<<<<< HEAD
+  function resultPageRedirect(selectedCourses: string[]){
+    sessionStorage.setItem("courses_selected", JSON.stringify([...selectedCourses])) 
+    nav("/showResults")
+=======
+  // Redirects user to results page
+  function resultPageRedirect(){
+    nav("/showProgress")
+>>>>>>> 07bb0a7c1789d669e143dba054e8e6cfe9d0a239
+    location.reload()
+  }
+
   return (
     <div className="flex flex-col justify-center mt-6 mb-6 gap-4">
       <div className="max-w-lg mx-auto md:w-[96rem] mt-20 mb-28">
@@ -137,7 +151,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
 
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
               <svg className="w-4 h-4 text-gray-500 dark:text-gray-400 z-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
               </svg>
           </div>
 
@@ -151,10 +165,16 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
             ref={inputRef}
             placeholder="Search Courses"
           />
+<<<<<<< HEAD
+          <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses:</label>
+          <button 
+          onClick={() => resultPageRedirect(selections)}
+          className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
+          >Next</button>
+=======
           <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses in Your Major:</label>
-          <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
-              // Does nothing right now
-            >Next</button>
+          <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md" onClick={() => resultPageRedirect() }>Next</button>
+>>>>>>> 07bb0a7c1789d669e143dba054e8e6cfe9d0a239
         </div>
 
         {query !== "" && searchResults.length > 0 && (
@@ -167,7 +187,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
       </div>
 
       <div className="flex flex-col justify-center items-center">
-        <p className="w-full md:w-8/12 text-4xl font-bold mb-1 shadow p-3 rounded">{`Your Courses in ${selectedProgram}`}</p> 
+        <p className="w-full md:w-8/12 text-4xl font-bold mb-1 shadow p-3 rounded">{`Your Courses for ${selectedProgram}`}</p> 
 
         <div className="w-full md:w-8/12 h-[300px] overflow-auto shadow p-3 text-lg rounded">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

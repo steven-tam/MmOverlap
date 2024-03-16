@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="selectCourses" element={<CoursePage />} />
-          <Route path="showProgress" element={<ResultsPage />} />
+          <Route path="showResults" element={<ResultsPage />} />
           <Route path="Example" element={<ExamplePage />} />
         </Routes>
       </BrowserRouter>
