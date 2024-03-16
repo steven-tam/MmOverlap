@@ -168,11 +168,6 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
           onClick={() => resultPageRedirect(selections)}
           className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
           >Next</button>
-
-          <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses in Your Major:</label>
-          <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
-              // Does nothing right now
-            >Next</button>
         </div>
 
         {query !== "" && searchResults.length > 0 && (
