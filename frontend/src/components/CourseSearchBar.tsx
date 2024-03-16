@@ -136,34 +136,9 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
     }
   }
 
-  // Redirects user to results page
-  function resultPageRedirect(){
-    nav("/showProgress")
-    location.reload()
-  }
-
-<<<<<<< HEAD
   function resultPageRedirect(selectedCourses: string[]){
     sessionStorage.setItem("courses_selected", JSON.stringify([...selectedCourses])) 
     nav("/showResults")
-=======
-  // Redirects user to results page
-  function resultPageRedirect(){
-    nav("/showProgress")
->>>>>>> 07bb0a7c1789d669e143dba054e8e6cfe9d0a239
-    location.reload()
-  }
-
-<<<<<<< HEAD
-  function resultPageRedirect(selectedCourses: string[]){
-    sessionStorage.setItem("courses_selected", JSON.stringify([...selectedCourses])) 
-    nav("/showResults")
-=======
-  // Redirects user to results page
-  function resultPageRedirect(){
-    nav("/showProgress")
->>>>>>> 07bb0a7c1789d669e143dba054e8e6cfe9d0a239
-    location.reload()
   }
 
   return (
@@ -187,13 +162,13 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
             ref={inputRef}
             placeholder="Search Courses"
           />
-<<<<<<< HEAD
+
           <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses:</label>
           <button 
           onClick={() => resultPageRedirect(selections)}
           className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
           >Next</button>
-=======
+
           <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses in Your Major:</label>
           <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
               // Does nothing right now
