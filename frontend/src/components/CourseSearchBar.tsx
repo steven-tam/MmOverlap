@@ -78,6 +78,8 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     var query_1 = query.replace(" ","");
     query_1 = query_1.toUpperCase();
+    var query_1 = query.replace(" ","");
+    query_1 = query_1.toUpperCase();
     if (event.key === "ArrowUp") {
       setSelectedCourseIndex((prevIndex) =>
         // If prevIndex is -1, set selected course index to last element, else go down
@@ -103,7 +105,9 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
             setSearchResults([]);
         }
       } else if (checkDuplicate(query_1) && checkValidCode(query_1)){   // Case of user typing in full course code and pressing enter
+      } else if (checkDuplicate(query_1) && checkValidCode(query_1)){   // Case of user typing in full course code and pressing enter
         // NEED TO ACCOUNT FOR USER TYPING CODE IN LOWERCASE, recognize anyway
+        setSelections(selections.concat(query_1));
         setSelections(selections.concat(query_1));
         setQuery("");
       }
@@ -130,6 +134,24 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
     } else {
       setSelections(selections.slice(0, REMOVE_INDEX).concat(selections.slice(REMOVE_INDEX + 1, selections.length)))
     }
+  }
+
+  // Redirects user to results page
+  function resultPageRedirect(){
+    nav("/showProgress")
+    location.reload()
+  }
+
+<<<<<<< HEAD
+  function resultPageRedirect(selectedCourses: string[]){
+    sessionStorage.setItem("courses_selected", JSON.stringify([...selectedCourses])) 
+    nav("/showResults")
+=======
+  // Redirects user to results page
+  function resultPageRedirect(){
+    nav("/showProgress")
+>>>>>>> 07bb0a7c1789d669e143dba054e8e6cfe9d0a239
+    location.reload()
   }
 
 <<<<<<< HEAD
@@ -173,8 +195,9 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
           >Next</button>
 =======
           <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses in Your Major:</label>
-          <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md" onClick={() => resultPageRedirect() }>Next</button>
->>>>>>> 07bb0a7c1789d669e143dba054e8e6cfe9d0a239
+          <button className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
+              // Does nothing right now
+            >Next</button>
         </div>
 
         {query !== "" && searchResults.length > 0 && (
