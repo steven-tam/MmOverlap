@@ -3,9 +3,10 @@ A project from Social Coding Club at the University of Minnesota!
 
 Gopher Major Planner serves as the solution for UofM students who plan on pursuing a combination of majors and minors that exhibit significant overlap. It helps students make informed decisions regarding their majors, minors, and courses by offering tailored insights based on intended major and past coursework.
 
-<img width="949" alt="GMP IN ACTION" src="https://github.com/stevennTam/MmOverlap/assets/60487779/50ed3a5b-cf96-4d8e-b1a2-21807afb9a2d">
+<img src="https://github.com/stevennTam/MmOverlap/assets/60487779/50ed3a5b-cf96-4d8e-b1a2-21807afb9a2d" alt="GMP IN ACTION" width="949" style="border: 1px solid black;">
 
 
+## Instructions for Running Locally
 We are still in development.
 Assuming no experience using react and node.js start with these commands 
 using gitbash or equivalent:
