@@ -3,7 +3,9 @@ A project from Social Coding Club at the University of Minnesota!
 
 Gopher Major Planner serves as the solution for UofM students who plan on pursuing a combination of majors and minors that exhibit significant overlap. It helps students make informed decisions regarding their majors, minors, and courses by offering tailored insights based on intended major and past coursework.
 
-<img src="https://github.com/stevennTam/MmOverlap/assets/60487779/50ed3a5b-cf96-4d8e-b1a2-21807afb9a2d" alt="GMP IN ACTION" width="949" style="border: 1px solid black;">
+\\
+<img width="947" alt="Screenshot 2024-03-19 170114" src="https://github.com/stevennTam/MmOverlap/assets/60487779/92e2594e-303e-491b-9f73-2edba1851319">
+\\
 
 
 ## Instructions for Running Locally
