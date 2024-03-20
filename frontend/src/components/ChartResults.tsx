@@ -1,9 +1,9 @@
 import React from 'react'
-import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js'
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
 
 ChartJS.register(
-    BarElement, CategoryScale, LinearScale, Tooltip, Legend 
+    BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title
   )
 
 type props = {
@@ -15,30 +15,30 @@ function ChartResults({selectedProgram, selectedCourses}: props) {
     const arrayCourses = JSON.parse(selectedCourses)
     console.log("Program Selected in ChartResults:", selectedProgram)
     console.log("Courses Selected in ChartResults:", arrayCourses)
+
+    // legend: {
+    //     position: 'right' as const,
+    // }
     
-    const options = {
+    const options = { 
         indexAxis: 'y' as const,
+        responsive: true,
+        maintainAspectRatio: false,
         elements: {
             bar: {
                 borderWidth: 2,
             },
         },
-        responsive: true,
         plugins: {
-            legend: {
-                position: 'right' as const,
-            },
             title: {
                 display: true,
-                text: 'Chart.js Horizontal Bar Chart',
+                text: 'Your Progress',
             },
         },
     };
 
-    const labels = ['January', 'February', 'March', 'April'];
-
-    const data = {
-        labels,
+    const data = { //Replace months with majors
+        labels: ['January', 'February', 'March', 'April'] ,
         datasets: [
             {
                 label: 'Dataset 1',
@@ -50,7 +50,7 @@ function ChartResults({selectedProgram, selectedCourses}: props) {
     };
     
   return (
-    <div>
+    <div className="w-full aspect-video mx-auto border-4 rounded-lg">
       <Bar 
         style = {{
             padding: '20px', 

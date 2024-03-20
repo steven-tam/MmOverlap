@@ -14,16 +14,12 @@ function ResultPage() {
   console.log("Program Selected:", program_selected)
   console.log("Courses Selected:", courses_selected)
 
-  // <ChartResults 
-  //   selectedProgram={program_selected ? program_selected : "Undecided"} 
-  //   selectedCourses={courses_selected ? courses_selected : '[]'}
-  //   />
+
 return (
   <div> 
-    <h1>Results/Analysis Page</h1>
     <ChartResults 
-    selectedProgram={program_selected ? program_selected : "Undecided"} 
-    selectedCourses={courses_selected ? courses_selected : '[]'}
+      selectedProgram={program_selected ? program_selected : "Undecided"} 
+      selectedCourses={courses_selected ? courses_selected : '[]'}
     />
   </div>
 )
