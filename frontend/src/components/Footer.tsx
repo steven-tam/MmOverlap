@@ -2,13 +2,14 @@ import React from 'react'
 import LeadDevCard from './LeadDevCard'
 import DevCard from './DevCard'
 const Footer = () => {
+  const defaultImg= "https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/hotel-nikko-san-francisco/hotelnikkosf/mainimages/golden-gate-bridge-detailpage-hero.jpg?width=970&height=650"
   //https://picsum.photos/200
   return (
     <div className="border-t">
       <div className="flex flex-col md:flex-row justify-center gap-4">
         <LeadDevCard name="Steven" 
           title='Website/Team Lead' 
-          image='https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/hotel-nikko-san-francisco/hotelnikkosf/mainimages/golden-gate-bridge-detailpage-hero.jpg?width=970&height=650' 
+          image={defaultImg} 
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'
@@ -16,7 +17,7 @@ const Footer = () => {
         <LeadDevCard 
           name="Sam" 
           title='Frontend Lead' 
-          image='https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/hotel-nikko-san-francisco/hotelnikkosf/mainimages/golden-gate-bridge-detailpage-hero.jpg?width=970&height=650'
+          image={defaultImg}
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'
@@ -24,7 +25,7 @@ const Footer = () => {
         <LeadDevCard 
           name='Benat' 
           title='Data Science Lead' 
-          image='https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/hotel-nikko-san-francisco/hotelnikkosf/mainimages/golden-gate-bridge-detailpage-hero.jpg?width=970&height=650'
+          image={defaultImg}
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'
@@ -35,14 +36,14 @@ const Footer = () => {
         
         <DevCard
           name='Peiyuan'
-          image='https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/hotel-nikko-san-francisco/hotelnikkosf/mainimages/golden-gate-bridge-detailpage-hero.jpg?width=970&height=650'
+          image={defaultImg}
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'
         />
         <DevCard
           name='person5'
-          image='https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/hotel-nikko-san-francisco/hotelnikkosf/mainimages/golden-gate-bridge-detailpage-hero.jpg?width=970&height=650'
+          image={defaultImg}
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'

@@ -12,6 +12,7 @@ export default {
         'gopher-maroon': '#7a0019',
         'github-black': '#1B1F23',
         'blueish-black': '#213547',
+        'offwhite': '#f9f7f6',
         
       },
       keyframes: {

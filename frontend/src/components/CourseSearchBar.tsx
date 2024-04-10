@@ -6,6 +6,7 @@ import CourseLists from "./CourseLists";
 
 
 type Course = {
+  id: string
   ind: number; // Index in search bar, see handleCourseClick / handleKeyDown
   code: string; // Course code
 };
@@ -21,6 +22,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
   const [searchResults, setSearchResults] = useState<Course[]>([]); // Displays / renders search results
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(-1); // Tracks selected index for display / selection
   const [selections, setSelections] = useState<string[]>([]);   // Tracks courses selected by user
+  const [selectionsId, setSelectionsId] = useState<string[]>([]);   // Tracks courses selected by user
 
   // Only used to "tell" the search bar what courses there are, setCourses slightly deceivng
   const [courses, setCourses] = useState<Course[]>([]);
@@ -105,9 +107,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
             setSearchResults([]);
         }
       } else if (checkDuplicate(query_1) && checkValidCode(query_1)){   // Case of user typing in full course code and pressing enter
-      } else if (checkDuplicate(query_1) && checkValidCode(query_1)){   // Case of user typing in full course code and pressing enter
         // NEED TO ACCOUNT FOR USER TYPING CODE IN LOWERCASE, recognize anyway
-        setSelections(selections.concat(query_1));
         setSelections(selections.concat(query_1));
         setQuery("");
       }
@@ -119,8 +119,8 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
     // Returns to default search after selection
     if(checkDuplicate(course.code)){
         setSelections(selections.concat(course.code));
+        setSelectionsId(selectionsId.concat(course.id.substring(0,7))); //Adds id of selected courses
         setQuery("");
-        console.log(selections);
         setSearchResults([]);
     }
   }
@@ -131,8 +131,10 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
 
     if(REMOVE_INDEX === 0){
       setSelections(selections.slice(1, selections.length))
+      setSelectionsId(selectionsId.slice(1, selectionsId.length));
     } else {
       setSelections(selections.slice(0, REMOVE_INDEX).concat(selections.slice(REMOVE_INDEX + 1, selections.length)))
+      setSelectionsId(selectionsId.slice(0, REMOVE_INDEX).concat(selectionsId.slice(REMOVE_INDEX + 1, selectionsId.length)));
     }
   }
 
@@ -163,9 +165,9 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
             placeholder="Search Courses"
           />
 
-          <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses:</label>
+          <label htmlFor="course_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Add Completed/Ongoing Courses</label>
           <button 
-          onClick={() => resultPageRedirect(selections)}
+          onClick={() => resultPageRedirect(selectionsId)}
           className="h-10 bg-gray-100 rounded-md ml-2 shadow-md"
           >Next</button>
         </div>
@@ -180,13 +182,13 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
       </div>
 
       <div className="flex flex-col justify-center items-center">
-        <p className="w-full md:w-8/12 text-4xl font-bold mb-1 shadow p-3 rounded">{`Your Courses for ${selectedProgram}`}</p> 
+        <p className="w-full text-4xl font-bold mb-1 p-3 rounded underline">{`Your Courses for ${selectedProgram}`}</p> 
 
-        <div className="w-full md:w-8/12 h-[300px] overflow-auto shadow p-3 text-lg rounded">
+        <div className="w-full h-[300px] overflow-auto p-3 text-lg rounded-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {selections.map((selection) => (
               <div key={selection}>
-                <button onClick={() => removeSelection(selection)} className="w-full hover:bg-red-300 hover:border-red-300 px-8">{selection}</button>
+                <button onClick={() => removeSelection(selection)} className="w-full hover:bg-red-300 hover:border-red-300 px-8 shadow bg-white border-2">{selection}</button>
               </div>
             ))}
           </div>

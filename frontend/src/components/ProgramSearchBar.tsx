@@ -111,7 +111,7 @@ export default function AutoCompleteSearchBar() {
               ref={inputRef}
               placeholder="Search Majors"
             />
-            <label htmlFor="search_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Enter Your Major:</label>
+            <label htmlFor="search_bar" className="absolute text-lg bottom-10 z-1 origin-[0] px-2 font-bold">Enter Your Major</label>
 
           <button
             // When enter clicked, redirect to course page
@@ -131,8 +131,8 @@ export default function AutoCompleteSearchBar() {
       </div>
 
       <div>
-        <p className="text-4xl font-bold mb-1 shadow p-3 rounded">Program Description:</p> 
-        <p className="h-[300px] md:w-full overflow-auto shadow p-3 text-lg rounded">{programDescription}</p>
+        <p className="text-4xl font-bold mb-1 p-3 rounded underline">Program Description</p> 
+        <p className="h-[300px] md:w-full overflow-auto p-3 text-lg rounded-lg">{programDescription}</p>
       </div>
 
     </div>
