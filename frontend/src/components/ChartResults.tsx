@@ -11,9 +11,8 @@ type props = {
 }
 
 function ChartResults({selectedProgram, selectedCourses}: props) {
-    const arrayCourses = JSON.parse(selectedCourses)
-    console.log("Program Selected in ChartResults:", selectedProgram)
-    console.log("Courses Selected in ChartResults:", arrayCourses)
+    // console.log("Program Selected in ChartResults:", selectedProgram)
+    // console.log("Courses Selected in ChartResults:", arrayCourses)
 
     // legend: {
     //     position: 'right' as const,

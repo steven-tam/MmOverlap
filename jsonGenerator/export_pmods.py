@@ -5,7 +5,7 @@ def exportMods(json_data):
     file_name = "modPrograms.json"
     filtered_data = []
     # List of keys you are interested in
-    keys_of_interest = ["campus", "college", 'catalogDisplayName' ,'type', "customFields" ,"specializations" , "requisites"]
+    keys_of_interest = ["campus", "college", 'catalogDisplayName' ,'type', "customFields", "requisites"]
 
     new_list_of_dicts = [{key: item[key] for key in keys_of_interest} for item in json_data]
     onlyTC = [item for item in new_list_of_dicts if item['campus'] == 'Twin Cities'] # Filters for programs in the Twin Cities

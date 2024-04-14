@@ -157,7 +157,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
           <input
             type="text"
             id="course_bar"
-            className="w-full px-4 py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:border-blue-500 rounded"
+            className="w-full px-4 py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:ring-light-gold rounded"
             onChange={handleQueryChange}
             onKeyDown={handleKeyDown}
             value={query}
@@ -184,11 +184,11 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
       <div className="flex flex-col justify-center items-center">
         <p className="w-full text-4xl font-bold mb-1 p-3 rounded underline">{`Your Courses for ${selectedProgram}`}</p> 
 
-        <div className="w-full h-[300px] overflow-auto p-3 text-lg rounded-lg">
+        <div className="w-full h-[300px] overflow-auto p-3 text-lg rounded-lg border-2 border-github-black shadow">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {selections.map((selection) => (
               <div key={selection}>
-                <button onClick={() => removeSelection(selection)} className="w-full hover:bg-red-300 hover:border-red-300 px-8 shadow bg-white border-2">{selection}</button>
+                <button onClick={() => removeSelection(selection)} className="w-full hover:bg-red-300 hover:border-red-300 px-8 shadow-md bg-white border-2">{selection}</button>
               </div>
             ))}
           </div>

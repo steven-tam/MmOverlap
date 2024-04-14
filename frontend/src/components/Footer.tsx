@@ -30,17 +30,18 @@ const Footer = () => {
           portfolioLink='#'
           linkedinLink='#'
         />
-      </div>
-      
-      <div className="flex flex-col md:flex-row justify-center gap-4">
-        
-        <DevCard
-          name='Peiyuan'
+
+        <LeadDevCard 
+          name='Peiyuan' 
+          title='Developer' 
           image={defaultImg}
           githubLink='#' 
           portfolioLink='#'
           linkedinLink='#'
         />
+      </div>
+      
+      {/* <div className="flex flex-col md:flex-row justify-center gap-4">
         <DevCard
           name='person5'
           image={defaultImg}
@@ -49,7 +50,7 @@ const Footer = () => {
           linkedinLink='#'
         />
 
-      </div>
+      </div> */}
       
       <p className='text-center text-gray-400'>
         Gopher Major Planner uses data from Summer 2017 to Fall 2023 provided by the <a href="https://idr.umn.edu/" target="_blank" className="hover:underline">Office of Institutional Data and Research</a>

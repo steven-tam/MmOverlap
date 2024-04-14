@@ -13,6 +13,7 @@ export default {
         'github-black': '#1B1F23',
         'blueish-black': '#213547',
         'offwhite': '#f9f7f6',
+        'navgray':'#ebe9e8'
         
       },
       keyframes: {

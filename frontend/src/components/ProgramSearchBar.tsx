@@ -104,7 +104,7 @@ export default function AutoCompleteSearchBar() {
             <input
               type="text"
               id="search_bar"
-              className="w-full py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:border-blue-500 rounded peer"
+              className="w-full py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:ring-light-gold rounded peer"
               onChange={handleQueryChange}
               onKeyDown={handleKeyDown}
               value={query}
@@ -132,7 +132,7 @@ export default function AutoCompleteSearchBar() {
 
       <div>
         <p className="text-4xl font-bold mb-1 p-3 rounded underline">Program Description</p> 
-        <p className="h-[300px] md:w-full overflow-auto p-3 text-lg rounded-lg">{programDescription}</p>
+        <p className="h-[300px] md:w-full overflow-auto p-3 text-lg rounded-lg border-2 border-github-black shadow">{programDescription}</p>
       </div>
 
     </div>
