@@ -81,29 +81,98 @@ function ResultPage() {
     return totalCredits;
 }
 
-function createChecklist(programRequirements: any, yourCourses: string[]){
-    const checklist: { [key: string]: boolean } = {};
-    const rules = programRequirements['rules']
-
-    for(var i in rules){
-        const condition: string = rules[i]['condition']
-        const subRule = rules[i]['subRules'] //note: some elements in rules have empty subRule
-        const coreName = rules[i]['name'] //Ex: "Mathematics Core", "Statics Core", ect
-        
-        switch(condition) {
+function validateCourses(subRuleArray:any){
+    //This function checks if yourCourses meets the subRules of a Core
+    for(var i in subRuleArray){
+        const subCondition = subRuleArray[i]["condition"]
+        switch(subCondition) {
             case "allOf":
-                console.log(condition)
+                // if(subRule) { //if subRule exists
+                //     var countRules = 0;
+                //     subRule.forEach((sr:any) => {
+                //         const subRuleValues = sr['value']['values'] //Ex: [{"logic": "or","value": ["8257721","0099201",]}]
+                //         for(const i in subRuleValues){
+                //             const logic = subRuleValues[i]['logic']
+                //             const coursesInValue = subRuleValues[i]['value']
+                //         }
+                     
+                //     })
+                //     }
+    
+                console.log(subCondition)
                 break;
-
+    
+            case "anyOf":
+                console.log(subCondition)
+                break;
+    
             case "completedAnyOf":
-                console.log(condition)
+                console.log(subCondition)
+                break;
+    
+            case "completedAllOf":
+                console.log(subCondition)
+                break;
+    
+            case "minimumCredits":
+                console.log(subCondition)
                 break;
 
+            default: 
+                return false
         }
-            
-        checklist[coreName] = false;
-    }
+    } 
+    return false
+}
 
+function createChecklist(requirements: any, yourCourses: string[]){
+    const checklist: any[] = [];
+
+    requirements.forEach((req:any) =>{
+        const requisites = req['rules']
+        const checklistObj: { [key: string]: boolean } = {};
+
+        checklistObj['requirementTitle'] = req["name"];  //Adds titles like "Admission Requirements" or "Program Requirements" to checklist
+        for(var i in requisites){
+            const rules = requisites[i]
+            const condition: string = rules['condition']
+            const subRule = rules['subRules'] //note: some elements in rules have empty subRule
+            const coreName = rules['name'] //Ex: "Mathematics Core", "Statics Core", ect
+    
+            switch(condition) {
+                case "allOf":
+                    if (validateCourses(subRule)){
+                        checklistObj[coreName] = true;
+                    }
+                    
+                    console.log(condition)
+                    break;
+
+                case "anyOf":
+                    if(subRule) { //if subRule exists
+
+                    }
+                    console.log(condition)
+                    break;
+    
+                case "completedAnyOf":
+                    console.log(condition)
+                    break;
+
+                case "completedAllOf":
+                    console.log(condition)
+                    break;
+
+                case "minimumCredits":
+                    console.log(condition)
+                    break;
+
+                default:
+                    checklistObj[coreName] = false; //Add coreNames to checklist
+            }
+        }
+        checklist.push(checklistObj)
+    })
     console.log('checkList:', checklist)
 
     return checklist
@@ -114,11 +183,11 @@ function checkRequirements(yourProgram: string){
 
     if (getProgramObj){
         const requirements = getProgramObj['requisites']['requisitesSimple'] // type ex: [{...},{...}]
-        const getProgramRequirements = requirements.find((req: any) => req.name == "Program Requirements");
-        const programChecklist = createChecklist(getProgramRequirements, yourCourses)
+        // const getProgramRequirements = requirements.find((req: any) => req.name == "Program Requirements");
+        const programChecklist = createChecklist(requirements, yourCourses)
 
-        console.log('getProgramRequirements:', getProgramRequirements);// var reqChecklist: {[key: string]: boolean; }[] = createChecklist(getProgramRequirements, yourCourses) // ex: [{"reqTitle": "Admission Requirement", "Mathematics Core": false, "Statics Core": false, ect}, {...}]
-        console.log('programChecklist:', programChecklist)
+        // console.log('getProgramRequirements:', getProgramRequirements);// var reqChecklist: {[key: string]: boolean; }[] = createChecklist(getProgramRequirements, yourCourses) // ex: [{"reqTitle": "Admission Requirement", "Mathematics Core": false, "Statics Core": false, ect}, {...}]
+     
     }
     else{
         console.log("Your Major is Undecided")
@@ -137,6 +206,7 @@ return (
       selectedCourses={yourCourses}
     />
     <CompareTab tabItems={itemsTab}/>
+
   </div>
 )
 }
