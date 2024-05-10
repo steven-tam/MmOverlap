@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import CompareTab from '../components/CompareTab';
 import ChartResults from '../components/ChartResults';
 import CoursesData from "../../../jsonGenerator/allCourses.json";
 import ProgramData from "../../../jsonGenerator/allMajors.json";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 type Program = {
     id: number; // Index in search bar, see handleProgramClick / handleKeyDown
@@ -28,41 +29,6 @@ function ResultPage() {
   const programDataTyped = ProgramData as Program[] //type casts programData
   const coursesDataTyped = CoursesData as Course[] //type casts coursesData
   var creditCounter = 0;
-  const itemsTab = [
-    {
-        title: program_selected, 
-        content: (
-            <div className='border-2 border-blue-400 rounded-lg p-4'>
-                <h1 className='text-3xl text-blue-600'>Title 1</h1>
-                <p>
-                    sometext
-                </p>
-            </div>
-        )
-    },
-    {
-        title: "Major 2", 
-        content: (
-            <div className='border-2 border-blue-400 rounded-lg p-4'>
-                <h1 className='text-3xl text-blue-600'>Title 2</h1>
-                <p>
-                    sometext
-                </p>
-            </div>
-        )
-    },
-    {
-        title: "Major 3", 
-        content: (
-            <div className='border-2 border-blue-400 rounded-lg p-4'>
-                <h1 className='text-3xl text-blue-600'>Title 3</h1>
-                <p>
-                    sometext
-                </p>
-            </div>
-        )
-    },
-  ]
   
   console.log("Program Selected:", yourProgram)
   console.log("Courses Selected:", yourCourses) //Array of course id
@@ -125,6 +91,7 @@ function validateCourses(subRuleArray:any){
     return false
 }
 
+
 function createChecklist(requirements: any, yourCourses: string[]){
     const checklist: any[] = [];
 
@@ -133,43 +100,58 @@ function createChecklist(requirements: any, yourCourses: string[]){
         const checklistObj: { [key: string]: boolean } = {};
 
         checklistObj['requirementTitle'] = req["name"];  //Adds titles like "Admission Requirements" or "Program Requirements" to checklist
+
         for(var i in requisites){
             const rules = requisites[i]
             const condition: string = rules['condition']
-            const subRule = rules['subRules'] //note: some elements in rules have empty subRule
-            const coreName = rules['name'] //Ex: "Mathematics Core", "Statics Core", ect
-    
-            switch(condition) {
-                case "allOf":
-                    if (validateCourses(subRule)){
-                        checklistObj[coreName] = true;
-                    }
+            const coreName = rules['name'] //Ex: Major: Astrophysics,  "Mathematics Core", "Statics Core", ect
+            const subRules = rules['subRules'] // Array
+            const coreStatus = false
+
+
+            for(var i in subRules){
+                const subRule = subRules[i]
+                const subName = subRule['name'] // Ex: Economics
+                const subCondition = subRule['condition']
+                const courseArray = subRule['value']['values'] // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
+        
+                const status = false;
+                console.log("subRule: ", subCondition)
+                console.log("courseArray: ", courseArray)
+
+                for(var e in courseArray){
+                    const logic = courseArray[e].logic
+                    const value = courseArray[e].value
                     
+                    console.log("logic:", logic)
+                    console.log("value:", value)
+
+
+                }
+
+              
+               
+            }
+
+            switch(condition) { 
+                case "allOf":
                     console.log(condition)
                     break;
-
+        
                 case "anyOf":
-                    if(subRule) { //if subRule exists
-
-                    }
                     console.log(condition)
                     break;
-    
-                case "completedAnyOf":
-                    console.log(condition)
-                    break;
-
-                case "completedAllOf":
-                    console.log(condition)
-                    break;
-
+        
                 case "minimumCredits":
                     console.log(condition)
                     break;
-
-                default:
-                    checklistObj[coreName] = false; //Add coreNames to checklist
+    
+                default: 
+                    return false
             }
+
+            checklistObj[coreName] = coreStatus
+
         }
         checklist.push(checklistObj)
     })
@@ -201,11 +183,25 @@ checkRequirements(yourProgram)
 return (
   <div> 
     <p>Total Credits: {calculateTotalCredits(yourCourses, creditCounter)}</p>
+    <Tabs>
+    <TabList>
+      <Tab>{yourProgram}</Tab>
+      <Tab>Title 2</Tab>
+    </TabList>
+
+    <TabPanel>
+      <h2>Any content 1</h2>
+    </TabPanel>
+    <TabPanel>
+      <h2>Any content 2</h2>
+    </TabPanel>
+  </Tabs>
+
     <ChartResults 
       selectedProgram={yourProgram} 
       selectedCourses={yourCourses}
     />
-    <CompareTab tabItems={itemsTab}/>
+
 
   </div>
 )

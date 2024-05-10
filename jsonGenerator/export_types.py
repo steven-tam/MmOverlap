@@ -8,8 +8,8 @@ def exportTypes(json_data):
     file_majors = "allMajors.json"
     file_minors = "allMinors.json"
     # Filter data based on key 'type' and its value 'major'
-    majors = [item for item in json_data if item['type'] == 'Major']
-    minors = [item for item in json_data if item['type'] == 'Minor']
+    majors = [item for item in json_data if (item['type'] == 'Major' and item['customFields']['programLevelCareer'] == 'Undergraduate')]
+    minors = [item for item in json_data if (item['type'] == 'Minor')]
     
     # Write filtered data to JSON file
     with open(file_majors, 'w') as outfile:
