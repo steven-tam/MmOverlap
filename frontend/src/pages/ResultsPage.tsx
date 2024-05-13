@@ -137,80 +137,145 @@ function createChecklist(requirements: any, yourCourses: string[]){
         const checklistObj: { [key: string]: boolean } = {};
 
         checklistObj['requirementTitle'] = req["name"];  //Adds titles like "Admission Requirements" or "Program Requirements" to checklist
-
+        
         for(var i in rules){
             const rule = rules[i] // Typically 1 rule
             const condition: string = rule['condition']
             const coreName = rule['name'] //Ex: Major: Astrophysics,  "Mathematics Core", "Statics Core", ect
             const subRules = rule['subRules'] // Array
+            const topValues = rule['value'] ? rule['value'] : []
             const coreStatus = false
-            var countSat = 0 // Tracks if yourCourses satisfies a requirement
+            var countSat = 0 // Tracks if yourCourses satisfies a values[e]
+            if(subRules.length != 0){
+                for(var i in subRules){
+                    const subRule = subRules[i]
+                    const subName = subRule['name'] ? subRule['name'] : "Unnamed" // Ex: Economics
+                    const subCondition = subRule['condition'] // Can be 'completeAllOf' or 'completeAnyOf'
+                    const values = subRule['value']['values'] // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
+                    console.log("subCondition: ", subCondition)
+                    
+                    for(var e in values){
+                        //Ex: values[e] = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
+                        const logic = values[e].logic
+                        const value = values[e].value
+                        console.log("logic:", logic, "value:", value)
+    
+                        switch(subCondition) {
+                            case "completedAnyOf": //Implies OR
+                            for(var v of value){ 
+                                console.log("v:", v)
+                                if(yourCourses.includes(v)){
+                                    console.log("completeAnyOf, or:", true)
+                                    countSat+= 1;
+                                    break; //Only 1 course needs to be in value
+                                }
+                            }
+                                break;
+                    
+                            case "completedAllOf" || "allOf":  //Can be 'or' or 'and'
+                                if(logic == "or"){
+                                    for(var v of value){ 
+                                        if(yourCourses.includes(v)){ //use 'includes()' instead of 'in' for strings
+                                            console.log("completeAllOf, or:", true)
+                                            countSat++;
+                                            break; //Only 1 course needs to be in value
+                                        }
+                                    }
+                                }
+                                else if(logic == "and"){
+                                    if(yourCourses.includes(value[0])){
+                                        console.log("completeAllOf, and:", true)
+                                        countSat++;
+                                    }
+                                }
+                                break;
 
 
-            for(var i in subRules){
-                const subRule = subRules[i]
-                const subName = subRule['name'] ? subRule['name'] : "Unnamed" // Ex: Economics
-                const subCondition = subRule['condition'] // Can be 'completeAllOf' or 'completeAnyOf'
-                const values = subRule['value']['values'] // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
-                console.log("subCondition: ", subCondition)
-
-                for(var e in values){
+    
+                            case "minimumCredits":
+                                console.log(subName + "--" + subCondition) // electives
+                                break;
+    
+                            default: 
+                                console.log("Problem In Switch:", subCondition)
+                                break;
+                        }
+                    }
+                }
+    
+                
+                console.log("coreName:", coreName)
+                console.log("countSat:", countSat)
+                console.log("subRules Length:", subRules.length)
+                if (countSat == subRules.length){
+                    checklistObj[coreName] = true
+                }
+                else{
+                    checklistObj[coreName] = coreStatus
+                }
+            }
+            else if (topValues != 0) {
+                const topValues = rule['value']
+                const tValue = topValues.values
+                console.log("topValue:", topValues)
+                console.log("tValue:", tValue)
+                for(var e in tValue){
                     //Ex: values[e] = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
-                    const logic = values[e].logic
-                    const value = values[e].value
+                    const logic = tValue[e].logic
+                    const value = tValue[e].value
                     console.log("logic:", logic, "value:", value)
 
-                    switch(subCondition) {
+                    switch(condition) {
                         case "completedAnyOf": //Implies OR
-                        for(var v in value){ 
-                            if(v in yourCourses){
-                                console.log("completeAllOf, or:", true)
+                        for(var v of value){ 
+                            console.log("v:", v)
+                            if(yourCourses.includes(v)){
+                                console.log("completeAnyOf, or:", true)
                                 countSat+= 1;
                                 break; //Only 1 course needs to be in value
                             }
                         }
                             break;
                 
-                        case "completedAllOf":  //Can be 'or' or 'and'
+                        case "completedAllOf" || "allOf":  //Can be 'or' or 'and'
                             if(logic == "or"){
-                                for(var v in value){ 
+                                for(var v of value){ 
                                     if(yourCourses.includes(v)){ //use 'includes()' instead of 'in' for strings
                                         console.log("completeAllOf, or:", true)
-                                        countSat+= 1;
+                                        countSat++;
                                         break; //Only 1 course needs to be in value
                                     }
                                 }
                             }
                             else if(logic == "and"){
-                                console.log("and!")
-                                console.log("v:", value[0], "yourCourses:", yourCourses)
                                 if(yourCourses.includes(value[0])){
                                     console.log("completeAllOf, and:", true)
-                                    countSat+= 1;
+                                    countSat++;
                                 }
                             }
                             break;
 
+
+
                         case "minimumCredits":
-                            console.log(subName + "--" + subCondition) // electives
+                            console.log("m:", condition) // electives
                             break;
 
                         default: 
-                            console.log("Problem In Switch")
-                            return false
+                            console.log("Problem In Switch:", condition)
+                            break;
                     }
                 }
-            }
-            console.log("coreName:", coreName)
-            console.log("countSat:", countSat)
-            console.log("subRules Length:", subRules.length)
-            if (countSat == subRules.length){
-                checklistObj[coreName] = true
+                if (countSat == tValue.length){
+                    checklistObj[coreName] = true
+                }
+                else{
+                    checklistObj[coreName] = coreStatus
+                }
             }
             else{
-                checklistObj[coreName] = coreStatus
+                console.log("unknown!")
             }
-
         }
         checklist.push(checklistObj)
     })

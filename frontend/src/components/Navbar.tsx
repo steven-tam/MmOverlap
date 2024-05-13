@@ -14,12 +14,12 @@ const Navbar = () => {
         </div>
       </div>
       
-      <nav className={toggle?'relative mt-2 z-10 p-7 bg-offwhite px-8 shadow-md rounded z-20':'hidden' }>
+      <nav className={toggle?'relative mt-2 z-10 p-7 bg-litewhite px-8 shadow-md rounded z-20':'hidden' }>
         <ul className='flex flex-col gap-4'>
-            <li><a href="/" className='block p-2 pl-4 hover:underline rounded-md md:max-w-full text-gopher-maroon'>Home</a></li>
-            <li><a href="/selectCourses" className='block p-2 pl-4 hover:underline rounded-md md:max-w-full text-gopher-maroon'>Select Courses</a></li>
-            <li><a href="/showResults" className='block p-2 pl-4 hover:underline rounded-md md:max-w-full text-gopher-maroon'>Show Results</a></li>
-            <li><a href="/example" className='block p-2 pl-4 hover:bg-navgray hover:underline rounded-md md:max-w-full text-gopher-maroon'>Example</a></li>
+            <li><a href="/" className='block p-2 pl-4 hover:bg-stone-100 hover:underline rounded-md md:max-w-full text-gopher-maroon'>Home</a></li>
+            <li><a href="/selectCourses" className='block p-2 pl-4 hover:bg-stone-100 hover:underline rounded-md md:max-w-full text-gopher-maroon'>Select Courses</a></li>
+            <li><a href="/showResults" className='block p-2 pl-4 hover:bg-stone-100 hover:underline rounded-md md:max-w-full text-gopher-maroon'>Show Results</a></li>
+            <li><a href="/example" className='block p-2 pl-4 hover:bg-stone-100 hover:underline rounded-md md:max-w-full text-gopher-maroon'>Example</a></li>
         </ul>
       </nav>
      

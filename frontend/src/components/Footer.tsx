@@ -55,7 +55,7 @@ const Footer = () => {
       <p className='text-center text-gray-400'>
         Gopher Major Planner uses data from Summer 2017 to Fall 2023 provided by the <a href="https://idr.umn.edu/" target="_blank" className="hover:underline">Office of Institutional Data and Research</a>
       </p>
-      <footer className="rounded-lg shadow m-4 dark:bg-gray-800">
+      <footer className="rounded-lg shadow m-4">
         <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 
             <a href="https://github.com/stevennTam/MmOverlap" target="_blank" className="hover:underline">Gopher Major Planner</a>. Contribute to our Github!
