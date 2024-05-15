@@ -36,11 +36,11 @@ function ChartResults({selectedProgram, selectedCourses}: props) {
     };
 
     const data = { //Replace months with majors
-        labels: ['January', 'February', 'March', 'April'] ,
+        labels: [selectedProgram, 'Major 2', 'Major 3', 'Major 4', 'Major 5'] ,
         datasets: [
             {
                 label: 'Dataset 1',
-                data: [3,2,1],
+                data: [4,3,2,1],
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             }

@@ -12,7 +12,7 @@ def exportMods(json_data):
 
     for item in onlyTC:
         filtered_item = item.copy() # Copies a program
-        filtered_item['customFields'] = {key: item['customFields'].get(key) for key in ['programLevelCareer', "cdProgramDescr"]} # Filters customFields for desired keys  
+        filtered_item['customFields'] = {key: item['customFields'].get(key) for key in ['programLevelCareer', "cdProgramDescr", "cdProgramCreditsProgramMax"]} # Filters customFields for desired keys  
         filtered_data.append(filtered_item)
 
     with open(file_name, 'w') as outfile:
