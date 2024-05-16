@@ -131,11 +131,12 @@ function createChecklist(requirements: any, yourCourses: string[]){
                     const subRule = subRules[i]
                     const subName = subRule['name'] ? subRule['name'] : "Unnamed" // Ex: Economics
                     const subCondition = subRule['condition'] // Can be 'completeAllOf' or 'completeAnyOf'
-                    const values = subRule['value']['values'] // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
+                    const values = subRule?.value?.values ? subRule?.value?.values : [] // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...], optional chaining
                     numCourses = values.length
                     minCredits = subRule.minCredits ? subRule.minCredits : 0;
                     maxCredits = subRule.maxCredits ? subRule.maxCredits : 0;
                     // console.log("subCondition: ", subCondition)
+                    console.log("values array:", values, values.length)
                     
                     for(var e in values){
                         //Ex: values[e] = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
