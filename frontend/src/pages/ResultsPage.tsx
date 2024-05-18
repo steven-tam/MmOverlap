@@ -60,25 +60,52 @@ function calculateCredits(courseIds: string[]){
     return totalCredits;
 }
 
-function createChecklist(requirements: any, yourCourses: string[]){
+function getCoursesInRule(values: any, yourCourses: string[]){
+    var storeCourses: string[] = []
+    for(var e in values){
+        const coursesObj = values[e] //Ex: coursesObj = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
+        const logic = coursesObj.logic
+        const value = coursesObj.value
+
+        for(var v of value){ 
+            if(logic.includes("or")){
+                for(var v of value){ 
+                    if(yourCourses.includes(v)){ //use 'includes()' instead of 'in' for strings
+                        storeCourses.push(v)
+                        break; //Only 1 course needs to be in value
+                    }
+                }
+            }
+            else if(logic.includes("and")){
+                if(yourCourses.includes(value[0])){
+                    storeCourses.push(v)
+                }
+            }
+        }
+    }
+
+    return storeCourses.filter((item, index)=> storeCourses.indexOf(item) === index) // storeCourses without duplicates
+}
+
+function createChecklist(programObj: any, yourCourses: string[]){
+    const requirements = programObj['requisites']['requisitesSimple']
     const checklist: any[] = [];
     var validCourses: string[] = []
     
     requirements.forEach((req:any) =>{
         const rules = req['rules']
-        const checklistObj: { [key: string]: any[] } = {};
+        const checklistObj: { [key: string]: any } = {};
 
-        checklistObj['requirementTitle'] = req["name"];  //Adds titles like "Admission Requirements" or "Program Requirements" to checklist
+        checklistObj['requirementTitle'] = req.name;  //Adds titles like "Admission Requirements" or "Program Requirements" to checklist
         
         for(var i in rules){
             // Chracteristics of Rule TYPE 1: uses subRule, no values, conditions: ["allOf", "anyOf"]
             // Chracteristics of Rule TYPE 2: empty subRule, uses value, conditions: ["completedAllOf", "completedAnyOf", "completeVariableCoursesAndVariableCredits", "minimumCredits", "completedAtLeastXOf"]
             const rule = rules[i]
-            const condition: string = rule['condition'] // Can be Rule TYPE 1 or TYPe 2
-            const coreName = rule['name'] //Ex: Major: Astrophysics,  "Mathematics Core", "Statics Core", ect
-
-            const subRules = rule['subRules'] // Used for type 1
-            const topValues = rule['value'] ? rule['value'] : [] // Used for TYPE 2
+            const condition: string = rule.condition // Can be Rule TYPE 1 or TYPE 2
+            const coreName = rule.name //Ex: Major: Astrophysics,  "Mathematics Core", "Statics Core", ect
+            const subRules = rule.subRules // Used for type 1
+            const ruleValue = rule.value ? rule.value : [] // Used for TYPE 2
 
             // Used in "completeVariableCoursesAndVariableCredits" and "completedAtLeastXOf"
             var minCredits = rule.minCredits ? rule.minCredits : null;
@@ -88,97 +115,40 @@ function createChecklist(requirements: any, yourCourses: string[]){
             
 
             if(condition.includes("allOf")){ // Condition for handling type 1
-                var countSat = 0 // Tracks if yourCourses satisfies a values[e]
                 var subRuleChecklist: any[] = []
                 
                 for(var i in subRules){
                     const subRule = subRules[i]
-                    const subName = subRule['name'] ? subRule['name'] : "Unnamed" // Ex: Economics
+                    const subName:string = subRule['name'] ? subRule['name'] : "Unnamed" // Ex: Economics
                     const subCondition = subRule['condition'] // Almost all uses TYPE 2. AFRO-Elective uses TYPE 1
-                    const values = subRule?.value?.values ? subRule?.value?.values : []; // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
+                    const values: any[] = subRule?.value?.values ? subRule?.value?.values : []; // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
+                    const storeCourses: string[] = getCoursesInRule(values, yourCourses)
+                    const storeCoursesCredits: number = calculateCredits(storeCourses)
                     var subRuleObj = {[subName]: false}
-                    var storeCourses: string[] = [] // Used in "completeVariableCoursesAndVariableCredits" and "minimumCredits"
-                
-                    // console.log("subCondition: ", subCondition)
-                    console.log("values array:", values, values.length)
+                    validCourses.push(...storeCourses) // for tracking courses in program
+                  
 
+                    const subMinCredits = subRule.minCredits ? subRule.minCredits : null;
+                    const subMaxCredits = subRule.maxCredits ? subRule.maxCredits : null;
+                    const subMinCourses = subRule.minCourses ? subRule.minCourses : null;
+                    const subMaxCourses = subRule.maxCourses ? subRule.maxCourses : null;
+                    
                     switch(subCondition) {
-                        case "completedAnyOf": // logic is always "or"
-                            for(var e in values){
-                                //Ex: coursesObj = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
-                                const coursesObj = values[e]
-                                const logic = coursesObj.logic
-                                const value = coursesObj.value
-                                // console.log("logic:", logic, "value:", value)
-                                for(var v of value){ 
-                                    // console.log("v:", v)
-                                    if(yourCourses.includes(v)){
-                                        validCourses.push(v)
-
-                                        subRuleObj[subName] = true
-                                        break; //Only need 1 course
-                                    }
-                                }
+                        case "completedAnyOf": 
+                            if (storeCourses.length != 0){
+                                subRuleObj[subName] = true
                             }
-                            
                         break;
                         
                         case "completedAllOf":  // Logic is either "and" or "or"
-                            var countValid = 0
-
-                            for(var e in values){
-                                //Ex: coursesObj = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
-                                const coursesObj = values[e]
-                                const logic = coursesObj.logic
-                                const value = coursesObj.value
-
-                                if(logic.includes("or")){
-                                    for(var v of value){ 
-                                        if(yourCourses.includes(v)){ //use 'includes()' instead of 'in' for strings
-                                            validCourses.push(v)
-                                            countValid++
-                                            break; //Only 1 course needs to be in value
-                                        }
-                                    }
-                                }
-                                else if(logic.includes("and")){
-                                    if(yourCourses.includes(value[0])){ // "and" object will always look like {"logic": "and", "value": ["#######"]}
-                                        validCourses.push(value[0])
-                                        countValid++
-                                        countSat++;
-                                    }
-                                }
-                            }
-
-                            if(countValid == values.length){ 
+                            if(storeCourses.length == values.length){ 
                                 subRuleObj[subName] = true
                             }
                             break;
 
                         case "minimumCredits":
                             var storeMinCredits = subRule.minCredits
-                            for(var e in values){
-                                const coursesObj = values[e] //Ex: coursesObj = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
-                                const logic = coursesObj.logic
-                                const value = coursesObj.value
-
-                                for(var v of value){ 
-                                    if(logic.includes("or")){
-                                        for(var v of value){ 
-                                            if(yourCourses.includes(v)){ //use 'includes()' instead of 'in' for strings
-                                                storeCourses.push(v)
-                                                break; //Only 1 course needs to be in value
-                                            }
-                                        }
-                                    }
-                                    else if(logic.includes("and")){
-                                        if(yourCourses.includes(value[0])){
-                                            storeCourses.push(v)
-                                        }
-                                    }
-                                }
-                            }
-                            storeMinCredits -= calculateCredits(storeCourses)
+                            storeMinCredits -= storeCoursesCredits
                             if (storeMinCredits <= 0){
                                 subRuleObj[subName] = true
                             }
@@ -186,123 +156,188 @@ function createChecklist(requirements: any, yourCourses: string[]){
 
                         case "completeVariableCoursesAndVariableCredits":
                             //Checks if credits or courses are used
-                            const subMinCredits = subRule.minCredits ? subRule.minCredits : null;
-                            const subMaxCredits = subRule.maxCredits ? subRule.maxCredits : null;
-                            const subMinCourses = subRule.minCourses ? subRule.minCourses : null;
-                            const subMaxCourses = subRule.maxCourses ? subRule.maxCourses : null;
-
-                            for(var e in values){
-                                const coursesObj = values[e] //Ex: coursesObj = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
-                                const logic = coursesObj.logic
-                                const value = coursesObj.value
-
-                                for(var v of value){ 
-                                    if(logic.includes("or")){
-                                        for(var v of value){ 
-                                            if(yourCourses.includes(v)){ //use 'includes()' instead of 'in' for strings
-                                                storeCourses.push(v)
-                                                break; //Only 1 course needs to be in value
-                                            }
-                                        }
-                                    }
-                                    else if(logic.includes("and")){
-                                        if(yourCourses.includes(value[0])){
-                                            storeCourses.push(v)
-                                        }
-                                    }
-                                }
-                            }
-
-                            if(calculateCredits(storeCourses) <= maxCredits && calculateCredits(storeCourses) >= minCredits){
+                            if (storeCoursesCredits <= subMaxCourses && storeCoursesCredits && storeCourses.length <= subMaxCourses && storeCourses.length >= subMinCourses){
                                 subRuleObj[subName] = true
                             }
-                            else if(storeCourses.length <= maxCourses && storeCourses.length >= minCourses){
+                            else if(storeCoursesCredits <= subMaxCredits && storeCoursesCredits >= subMinCredits){
+                                subRuleObj[subName] = true
+                            }
+                            else if(storeCourses.length <= subMaxCourses && storeCourses.length >= subMinCourses){
                                 subRuleObj[subName] = true
                             } 
-                            else if (calculateCredits(storeCourses) <= maxCredits && calculateCredits(storeCourses) && storeCourses.length <= maxCourses && storeCourses.length >= minCourses){
-                                subRuleObj[subName] = true
-                            }
-                            
                             break;
 
                             case "completedAtLeastXOf":
-                                
+                                if(storeCourses.length >= subMinCourses){
+                                    subRuleObj[subName] = true
+                                }
                                 break;
 
                         default: 
-                            console.log("Problem In Switch:", subCondition)
+                            console.log("Condition Not Found:", subCondition)
+                            break;
+                    }
+                    
+                    subRuleChecklist.push(subRuleObj)
+                }
+
+                const subRuleObjValues = subRuleChecklist.flatMap(obj => Object.values(obj))
+                if(!subRuleObjValues.includes(false)){
+                    checklistObj[coreName] = true
+                    checklistObj["subRules?"+coreName] = subRuleChecklist
+                }
+                else{
+                    checklistObj[coreName] = false
+                    checklistObj["subRules?"+coreName] = subRuleChecklist
+                }
+        
+            }
+            else if (condition.includes("anyOf")){
+                var subRuleChecklist: any[] = []
+                
+                for(var i in subRules){
+                    const subRule = subRules[i]
+                    const subName:string = subRule['name'] ? subRule['name'] : "Unnamed" // Ex: Economics
+                    const subCondition = subRule['condition'] // Almost all uses TYPE 2. AFRO-Elective uses TYPE 1
+                    const values: any[] = subRule?.value?.values ? subRule?.value?.values : []; // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
+                    const storeCourses: string[] = getCoursesInRule(values, yourCourses)
+                    const storeCoursesCredits: number = calculateCredits(storeCourses)
+                    validCourses.push(...storeCourses) // for tracking courses in program
+                    var subRuleObj = {[subName]: false}
+                   
+
+                    const subMinCredits = subRule.minCredits ? subRule.minCredits : null;
+                    const subMaxCredits = subRule.maxCredits ? subRule.maxCredits : null;
+                    const subMinCourses = subRule.minCourses ? subRule.minCourses : null;
+                    const subMaxCourses = subRule.maxCourses ? subRule.maxCourses : null;
+                    
+                    switch(subCondition) {
+                        case "completedAnyOf": 
+                            if (storeCourses.length != 0){
+                                subRuleObj[subName] = true
+                            }
+                        break;
+                        
+                        case "completedAllOf":  // Logic is either "and" or "or"
+                            if(storeCourses.length == values.length){ 
+                                subRuleObj[subName] = true
+                            }
+                            break;
+
+                        case "minimumCredits":
+                            var storeMinCredits = subRule.minCredits
+                            storeMinCredits -= storeCoursesCredits
+                            if (storeMinCredits <= 0){
+                                subRuleObj[subName] = true
+                            }
+                            break;
+
+                        case "completeVariableCoursesAndVariableCredits":
+                            //Checks if credits or courses are used
+                            if (storeCoursesCredits <= subMaxCourses && storeCoursesCredits && storeCourses.length <= subMaxCourses && storeCourses.length >= subMinCourses){
+                                subRuleObj[subName] = true
+                            }
+                            else if(storeCoursesCredits <= subMaxCredits && storeCoursesCredits >= subMinCredits){
+                                subRuleObj[subName] = true
+                            }
+                            else if(storeCourses.length <= subMaxCourses && storeCourses.length >= subMinCourses){
+                                subRuleObj[subName] = true
+                            } 
+                            break;
+
+                            case "completedAtLeastXOf":
+                                if(storeCourses.length >= subMinCourses){
+                                    subRuleObj[subName] = true
+                                }
+                                break;
+
+                        default: 
+                            console.log("Condition Not Found:", subCondition)
                             break;
                     }
                     
                     subRuleChecklist.push(subRuleObj)
                 }
                 
-                checklistObj[coreName] = subRuleChecklist
-            }
-            else if (condition.includes("anyOf")){
-                console.log("anyOf")
-            }
-            else if (topValues != 0) { // Chracteristics of Rule type 2: empty subRule, uses value
-                const topValues = rule.value
-                const tValue = topValues.values
-                console.log("topValue:", topValues)
-                console.log("tValue:", tValue)
-                for(var e in tValue){
-                    //Ex: values[e] = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
-                    const logic = tValue[e].logic
-                    const value = tValue[e].value
-
-                    switch(condition) {
-                        case "completedAnyOf": // Logic is always "or"
-                        for(var v of value){
-                            if(yourCourses.includes(v)){
-                                validCourses.push(v)
-                                countSat+= 1;
-                                break; //Only 1 course needs to be in value
-                            }
-                        }
-                            break;
-                
-                        case "completedAllOf":  // Logic is either "and" or "or"
-                            if(logic == "or"){
-                                for(var v of value){ 
-                                    if(yourCourses.includes(v)){ //use 'includes()' instead of 'in' for strings
-                                        validCourses.push(v)
-                                        countSat++;
-                                        break; //Only 1 course needs to be in value
-                                    }
-                                }
-                            }
-                            else if(logic == "and"){
-                                if(yourCourses.includes(value[0])){
-                                    validCourses.push(value[0])
-                                    countSat++;
-                                }
-                            }
-                            break;
-
-                        default: 
-                            console.log("Problem In Switch:", condition)
-                            break;
-                    }
+                const subRuleObjValues = subRuleChecklist.flatMap(obj => Object.values(obj)) // Array of boolean values. ex: [true, true, false]
+                if(subRuleObjValues.includes(true)){
+                    checklistObj[coreName] = true
+                    checklistObj["subRules?"+coreName] = subRuleChecklist
+                }
+                else{
+                    checklistObj[coreName] = false
+                    checklistObj["subRules?"+coreName] = subRuleChecklist
                 }
 
-                countSat == tValue.length ? checklistObj[coreName] = true : checklistObj[coreName] = false
+            }
+            else if (ruleValue != 0) { // Chracteristics of Rule type 2: empty subRule, uses value
+                const ruleValues = ruleValue.values
+                const storeCourses = getCoursesInRule(ruleValues, yourCourses)
+                validCourses.push(...storeCourses) // for tracking courses in program
+                const storeCoursesCredits = calculateCredits(storeCourses)
+               
+                switch(condition) {
+                    case "completedAnyOf": 
+                        if (storeCourses.length != 0){
+                            checklistObj[coreName] = true
+                        }
+                    break;
+                    
+                    case "completedAllOf":  // Logic is either "and" or "or"
+                        if(storeCourses.length == ruleValues.length){ 
+                            checklistObj[coreName] = true
+                        }
+                        
+                        break;
+
+                    case "minimumCredits":
+                        var storeMinCredits = rule.minCredits
+                        storeMinCredits -= storeCoursesCredits
+                        if (storeMinCredits <= 0){
+                            checklistObj[coreName] = true
+                        }
+                        break;
+
+                    case "completeVariableCoursesAndVariableCredits":
+                        //Checks if credits or courses are used
+                        if (storeCoursesCredits <= maxCredits && storeCoursesCredits && storeCourses.length <= maxCourses && storeCourses.length >= minCourses){
+                            checklistObj[coreName] = true
+                        }
+                        else if(storeCoursesCredits <= maxCredits && storeCoursesCredits >= minCredits){
+                            checklistObj[coreName] = true
+                        }
+                        else if(storeCourses.length <= maxCourses && storeCourses.length >= minCourses){
+                            checklistObj[coreName] = true
+                        } 
+                        break;
+
+                        case "completedAtLeastXOf":
+                            if(storeCourses.length >= minCourses){
+                                checklistObj[coreName] = true
+                            }
+                            break;
+
+                    default: 
+                        console.log("Condition Not Found:", condition)
+                        break;
+                }
+                console.log("checklistObj:", checklistObj)
 
             }
             else{
-                console.log("unknown!")
+                console.log("Error!")
             }
         }
-        const currCredits = calculateCredits(validCourses).toString()
-        const curCreditsObj = {"curCreditsInProgram": currCredits}
         checklist.push(checklistObj)
 
     })
-    const currCredits = calculateCredits(validCourses).toString()
-    const currCreditsObj = {"curCreditsInProgram": currCredits}
-    checklist.push(currCreditsObj)
-    console.log(validCourses)
+    // Customize information here
+    const uniqueValidCourses= validCourses.filter((item,index) => validCourses.indexOf(item) == index) // Removes Duplicates
+    const currCredits = calculateCredits(uniqueValidCourses).toString() // Parsing to string for consistency
+
+    const customInfoObj = {"curCreditsInProgram": currCredits, "validCourses": uniqueValidCourses, "programMaxCredits": programObj.customFields.cdProgramCreditsProgramMax}
+    checklist.push(customInfoObj)
+
     console.log('checkList:', checklist)
 
     return checklist
@@ -312,11 +347,7 @@ function checkRequirements(yourProgram: string){
     const getProgramObj = yourProgram != 'Undecided' ? allPrograms.find(p => p.catalogDisplayName == yourProgram): false 
     console.log(yourProgram)
     if (getProgramObj){
-        const requirements = getProgramObj['requisites']['requisitesSimple'] // type ex: [{...},{...}]
-        // const getProgramRequirements = requirements.find((req: any) => req.name == "Program Requirements");
-        const programChecklist = createChecklist(requirements, yourCourses)
-
-        // console.log('getProgramRequirements:', getProgramRequirements);// var reqChecklist: {[key: string]: boolean; }[] = createChecklist(getProgramRequirements, yourCourses) // ex: [{"reqTitle": "Admission Requirement", "Mathematics Core": false, "Statics Core": false, ect}, {...}]
+        const programChecklist = createChecklist(getProgramObj, yourCourses)
      
     }
     else{
