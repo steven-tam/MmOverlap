@@ -1,7 +1,7 @@
 const express = require('express')
 const fs = require('fs')
 const cors = require('cors')
-
+const pool = require('./db');
 const app = express()
 
 app.use(cors())
@@ -9,9 +9,20 @@ app.use(express.json()) //activates json-parser to make accessing data easy
 
 const allMajorsPath = './data/allMajors.json'
 
-app.get('/', (request, response) => {
-  response.send("<h1>Hello World</h1>")
-})
+app.get('/', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// app.get('/', (request, response) => {
+//   response.send("<h1>Hello World</h1>")
+// })
 
 app.get('/api/allMajors', (request, response) => {
   fs.readFile(allMajorsPath, 'utf8', (err, data) => {  // Read the content of allMajors.json
