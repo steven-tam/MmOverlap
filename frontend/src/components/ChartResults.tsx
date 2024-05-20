@@ -7,17 +7,38 @@ ChartJS.register(
 
 type props = {
     selectedProgram: string;
-    selectedCourses: string;
+    sortedByOverlap: any[];
 }
 
-function ChartResults({selectedProgram, selectedCourses}: props) {
-    // console.log("Program Selected in ChartResults:", selectedProgram)
-    // console.log("Courses Selected in ChartResults:", arrayCourses)
-
+function ChartResults({selectedProgram, sortedByOverlap}: props) {
+    console.log("Program Selected in ChartResults:", selectedProgram)
+    console.log("sortedByOverlap", sortedByOverlap)
+    const labelsArray = sortedByOverlap.map(obj => obj.major).length > 0 ? sortedByOverlap.map(obj => obj.major) : [selectedProgram, "NO PROGRAM/COURSES SELECTED", "NAVIGATE TO HOME OR SELECT COURSES", "AND ADD PROGRAM OR COURSES!" ]
+    const creditsOfOverlap = sortedByOverlap.map(obj => obj.curCreditsInProgram).length > 0 ? sortedByOverlap.map(obj => obj.curCreditsInProgram) : [3, 2, 1]
+    console.log("labelArray:", labelsArray)
     // legend: {
     //     position: 'right' as const,
     // }
-    
+    const changeBorderColors = () => {
+        const stepSize = Math.trunc(110/labelsArray.length)
+        var colors:string[] = []
+        for(let i = 0 ; i < labelsArray.length; i++){
+            const col = i * stepSize
+            colors.push(`hsla(${col}, 80%, 60%)`)
+        }
+        return colors
+    }
+
+    const changeBackgroundColors = () => {
+        const stepSize = Math.trunc(108/labelsArray.length)
+        var colors:string[] = []
+        for(let i = 0 ; i < labelsArray.length; i++){
+            const col = i * stepSize
+            colors.push(`hsla(${col}, 80%, 60%, 0.75)`)
+        }
+        return colors
+    }
+
     const options = { 
         indexAxis: 'y' as const,
         responsive: true,
@@ -34,21 +55,21 @@ function ChartResults({selectedProgram, selectedCourses}: props) {
             },
         },
     };
-
-    const data = { //Replace months with majors
-        labels: [selectedProgram, 'Major 2', 'Major 3', 'Major 4', 'Major 5'] ,
+    //'rgba(255, 99, 132, 0.5)'
+    const data: any = { //Replace months with majors
+        labels: labelsArray ,
         datasets: [
             {
-                label: 'Dataset 1',
-                data: [4,3,2,1],
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                label: 'Credits',
+                data: creditsOfOverlap,
+                borderColor: changeBorderColors,
+                backgroundColor: changeBackgroundColors,
             }
         ],
     };
     
   return (
-    <div className="w-full aspect-video mx-auto border-4 rounded-lg">
+    <div className="w-full aspect-video mx-auto border-slate-100 border-4 rounded-lg">
       <Bar 
         style = {{
             padding: '20px', 

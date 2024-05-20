@@ -2,7 +2,7 @@ import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
 import all_progs from "../../../backend/data/allMajors.json";
 import prog_names from "../../../backend/data/programNames.json";
-import { Navigate, useNavigate, redirect } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 
 type Program = {

@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react'
 import ChartResults from '../components/ChartResults';
-import CoursesData from "../../../jsonGenerator/allCourses.json";
-import ProgramData from "../../../jsonGenerator/allMajors.json";
-import { elements } from 'chart.js';
-
+import CoursesData from "../../../backend/data/allCourses.json";
+import ProgramData from "../../../backend/data/allMajors.json";
 
 type Program = {
     id: number; // Index in search bar, see handleProgramClick / handleKeyDown
@@ -30,9 +27,6 @@ function ResultPage() {
   const allPrograms = ProgramData as Program[] //type casts programData
   const allCourses = CoursesData as Course[] //type casts coursesData
   var creditCounter = 0;
-  
-  console.log("Program Selected:", yourProgram)
-  console.log("Courses Selected:", yourCourses) //Array of course id
 
   function calculateTotalCredits(courseIds: string[], totalCredits: number){
     totalCredits = 0 // resets counter when you revise your courses
@@ -62,7 +56,7 @@ function calculateCredits(courseIds: string[]){
     return totalCredits;
 }
 
-function getCoursesInRule(values: any, yourCourses: string[]){
+function createStoreCourses(values: any, yourCourses: string[]){
     var storeCourses: string[] = []
     for(var e in values){
         const coursesObj = values[e] //Ex: coursesObj = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
@@ -88,6 +82,7 @@ function getCoursesInRule(values: any, yourCourses: string[]){
 
     return storeCourses.filter((item, index)=> storeCourses.indexOf(item) === index) // Filters out duplicates
 }
+
 
 function checkConditions(condition:string, values:any[], storeCourses: string[], storeCoursesCredits:number, name:string, minCredits:number, maxCredits:number, minCourses:number, maxCourses:number){
     var subRuleObj = {[name]: 'False'}
@@ -175,7 +170,7 @@ function createChecklist(programObj: any, yourCourses: string[]){
                     const subName:string = subRule['name'] ? subRule['name'] : "Unnamed" // Ex: Economics
                     const subCondition = subRule['condition'] // Almost all uses TYPE 2. AFRO-Elective uses TYPE 1
                     const values: any[] = subRule?.value?.values ? subRule?.value?.values : []; // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
-                    const storeCourses: string[] = getCoursesInRule(values, yourCourses)
+                    const storeCourses: string[] = createStoreCourses(values, yourCourses)
                     const storeCoursesCredits: number = calculateCredits(storeCourses)
 
                     const subMinCredits = subRule.minCredits ? subRule.minCredits : null;
@@ -186,7 +181,7 @@ function createChecklist(programObj: any, yourCourses: string[]){
                     const subRuleObj = checkConditions(subCondition, values, storeCourses, storeCoursesCredits, subName, subMinCredits, subMaxCredits, subMinCourses, subMaxCourses)
 
                     validCourses.push(...storeCourses) // for tracking courses in program
-                    
+
                     subRuleChecklist.push(subRuleObj)
                 }
 
@@ -207,7 +202,7 @@ function createChecklist(programObj: any, yourCourses: string[]){
                     const subName:string = subRule['name'] ? subRule['name'] : "Unnamed" // Ex: Economics
                     const subCondition = subRule['condition'] // Almost all uses TYPE 2. AFRO-Elective uses TYPE 1
                     const values: any[] = subRule?.value?.values ? subRule?.value?.values : []; // Ex: [{"logic": "or","value": ["8257721","0099201","0062811","8019831"]}, ...]
-                    const storeCourses: string[] = getCoursesInRule(values, yourCourses)
+                    const storeCourses: string[] = createStoreCourses(values, yourCourses)
                     const storeCoursesCredits: number = calculateCredits(storeCourses)
 
                     const subMinCredits = subRule.minCredits ? subRule.minCredits : null;
@@ -216,8 +211,8 @@ function createChecklist(programObj: any, yourCourses: string[]){
                     const subMaxCourses = subRule.maxCourses ? subRule.maxCourses : null;
                     
                     const subRuleObj = checkConditions(subCondition, values, storeCourses, storeCoursesCredits, subName, subMinCredits, subMaxCredits, subMinCourses, subMaxCourses)
+
                     validCourses.push(...storeCourses) // for tracking courses in program
-                    
                     subRuleChecklist.push(subRuleObj)
                 }
                 
@@ -233,10 +228,12 @@ function createChecklist(programObj: any, yourCourses: string[]){
             }
             else if (ruleValue != 0) { // Chracteristics of Rule type 2: empty subRule, uses value
                 const ruleValues = ruleValue.values
-                const storeCourses = getCoursesInRule(ruleValues, yourCourses)
-                validCourses.push(...storeCourses) // for tracking courses in program
+                const storeCourses = createStoreCourses(ruleValues, yourCourses)
                 const storeCoursesCredits = calculateCredits(storeCourses)
-               
+                
+                validCourses.push(...storeCourses) // for tracking courses in program
+              
+
                 switch(condition) {
                     case "completedAnyOf": 
                         if (storeCourses.length != 0){
@@ -282,7 +279,6 @@ function createChecklist(programObj: any, yourCourses: string[]){
                         console.log("Condition Not Found:", condition)
                         break;
                 }
-                console.log("Type 2 checklistObj:", checklistObj)
 
             }
             else{
@@ -295,137 +291,153 @@ function createChecklist(programObj: any, yourCourses: string[]){
     // Customize information here
     const uniqueValidCourses= validCourses.filter((item,index) => validCourses.indexOf(item) == index) // Removes Duplicates
     const currCredits = calculateCredits(uniqueValidCourses).toString() // Parsing to string for consistency
-
-    const customInfoObj = {"curCreditsInProgram": currCredits, "validCourses": JSON.stringify(uniqueValidCourses), "programMaxCredits": programObj.customFields.cdProgramCreditsProgramMax}
+    
+    const customInfoObj = {"major": programObj.catalogDisplayName ,"curCreditsInProgram": currCredits, "validCourses": JSON.stringify(uniqueValidCourses), "programMaxCredits": programObj.customFields.cdProgramCreditsProgramMax}
     checklist.push(customInfoObj)
-
-    console.log('checkList:', checklist)
 
     return checklist
 }
 
 function checkRequirements(yourProgram: string){
     const getProgramObj = yourProgram != 'Undecided' ? allPrograms.find(p => p.catalogDisplayName == yourProgram): false 
-    console.log(yourProgram)
+  
     if (getProgramObj){
         return createChecklist(getProgramObj, yourCourses)
     }
     else{
-        return [{"Major": "Undecided"}]
+        return [{"major": "Undecided", "curCreditsInProgram": "0", "programMaxCredits": null, "validCourses": "[]"}]
     }
 }
 
-function getMostOverlap(){
-
+function createSortedOverlap(lastObjChecklist:any){
+    //lastObj Ex: {"major": "Undecided", "curCreditsInProgram": "0", "programMaxCredits": null, "validCourses": "[]"}
+    if(lastObjChecklist.major == 'Undecided'){
+        return []
+    }
+    else{
+        const allLastObjs = allPrograms.map(prog => {
+            const validCourses = JSON.parse(lastObjChecklist.validCourses) ? JSON.parse(lastObjChecklist.validCourses): []
+            const checkList = createChecklist(prog, validCourses)
+            
+            return checkList[checkList.length-1] //lastObj
+        })
+        const relevantLastObjs = allLastObjs.filter(lastObj => {return lastObj.curCreditsInProgram > 0})
+        const sortByOverlap = relevantLastObjs.sort((a , b) => {return b.curCreditsInProgram - a.curCreditsInProgram})
+    
+        return sortByOverlap
+    }
 }
 
 
 const yourMajorChecklist = checkRequirements(yourProgram)
 const lastObjChecklist = yourMajorChecklist[yourMajorChecklist.length-1]
 const maxCreditsProgram = lastObjChecklist.programMaxCredits ? lastObjChecklist.programMaxCredits : "N/A"
-console.log("test calculateCredits:", calculateCredits(['0138241', '0138201']))
-console.log(yourMajorChecklist[yourMajorChecklist.length-1])
+const sortedByOverlap = createSortedOverlap(lastObjChecklist)
+
 return (
   <div> 
-    <p className='text-lg font-bold'>Total Credits: {calculateTotalCredits(yourCourses, creditCounter)} </p>
-    <p className='text-lg font-bold'>Credits In Your Program: {lastObjChecklist.curCreditsInProgram}</p>
-    <p className='text-lg font-bold'>Max Credits In Your Program: {lastObjChecklist.programMaxCredits}</p>
+    <div className="">
+        <p className='text-lg font-bold'>Total Credits: {calculateTotalCredits(yourCourses, creditCounter)} </p>
+        <p className='text-lg font-bold'>Credits In Your Program: {lastObjChecklist.curCreditsInProgram}</p>
+        <p className='text-lg font-bold'>Max Credits In Your Program: {maxCreditsProgram}</p>
+    </div>
     <ChartResults 
       selectedProgram={yourProgram} 
-      selectedCourses={yourCourses}
+      sortedByOverlap={sortedByOverlap}
     />
-    {yourMajorChecklist.map((element, index) => (
-        <div key={index}>
-            <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{element.requirementTitle}</h2>
-            <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
-                {Object.entries(element).map(([key, value], idx:number) => {
-                    
-                    if( key !== 'requirementTitle' && key !== 'validCourses' && key !== 'curCreditsInProgram' && key !== 'programMaxCredits' && !key.includes("?")){
-                        if(value.includes("True")){
-                            return (
-                                <li key={idx} className="flex items-center">
-                                    <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                    </svg>
-                                    {key}
-                                </li>
-                            )
-                        }
-                        else{
-                            return (
-                                <li key={idx} className="flex items-center">
-                                    <svg className="w-3.5 h-3.5 me-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                    </svg>
-                                    {key}
-                                </li>
-                            )
-                        }
-                    } 
-                    else if (key.includes("?")){
-                        const k = key.substring(0, key.length-1) // Removes "?"
-                        const parseSubRules = JSON.parse(value) 
-                        var j = []
-                        for(const i in parseSubRules[1]){
-                            const obj = parseSubRules[1][i] 
-                            const subKey = Object.keys(obj)[0]  
-                            
-                            if(obj[subKey].includes("True")){
-                                j.push(
+    <div>
+        {yourMajorChecklist.map((element, index) => (
+            <div key={index}>
+                <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{element.requirementTitle}</h2>
+                <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
+                    {Object.entries(element).map(([key, value], idx:number) => {
+                        if( key !== 'requirementTitle' && key !== 'validCourses' && key !== 'curCreditsInProgram' && key !== 'programMaxCredits' && !key.includes("?") && key != 'major'){
+                            if(value.includes("True")){
+                                return (
                                     <li key={idx} className="flex items-center">
                                         <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
                                         </svg>
-                                        {subKey}
+                                        {key}
                                     </li>
                                 )
                             }
                             else{
-                                j.push(
+                                return (
                                     <li key={idx} className="flex items-center">
                                         <svg className="w-3.5 h-3.5 me-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
                                         </svg>
-                                        {subKey}
+                                        {key}
                                     </li>
                                 )
                             }
+                        } 
+                        else if (key.includes("?")){
+                            const k = key.substring(0, key.length-1) // Removes "?"
+                            const parseSubRules = JSON.parse(value) 
+                            var j = []
+                            for(const i in parseSubRules[1]){
+                                const obj = parseSubRules[1][i] 
+                                const subKey = Object.keys(obj)[0]  
+                                
+                                if(obj[subKey].includes("True")){
+                                    j.push(
+                                        <li key={idx} className="flex items-center">
+                                            <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                            </svg>
+                                            {subKey}
+                                        </li>
+                                    )
+                                }
+                                else{
+                                    j.push(
+                                        <li key={idx} className="flex items-center">
+                                            <svg className="w-3.5 h-3.5 me-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                            </svg>
+                                            {subKey}
+                                        </li>
+                                    )
+                                }
 
+                            }
+                            if(parseSubRules[0].includes("True")){
+                                return (
+                                    <div>
+                                        <li key={idx} className="flex items-center">
+                                            <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                            </svg>
+                                            {k}
+                                        </li>
+                                        <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
+                                            {j.map(subRule => subRule)}
+                                        </ul>
+                                    </div>
+                                )
+                            }else{
+                                return (
+                                    <div>
+                                        <li key={idx} className="flex items-center">
+                                            <svg className="w-3.5 h-3.5 me-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                            </svg>
+                                            {k}
+                                        </li>
+                                        <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
+                                            {j.map(subRule => subRule)}
+                                        </ul>
+                                    </div>
+                                )
+                            }
                         }
-                        if(parseSubRules[0].includes("True")){
-                            return (
-                                <div>
-                                    <li key={idx} className="flex items-center">
-                                        <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                        </svg>
-                                        {k}
-                                    </li>
-                                    <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
-                                        {j.map(subRule => subRule)}
-                                    </ul>
-                                </div>
-                            )
-                        }else{
-                            return (
-                                <div>
-                                    <li key={idx} className="flex items-center">
-                                        <svg className="w-3.5 h-3.5 me-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                        </svg>
-                                        {k}
-                                    </li>
-                                    <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
-                                        {j.map(subRule => subRule)}
-                                    </ul>
-                                </div>
-                            )
-                        }
-                    }
-                })}
-          </ul>
-        </div>
-      ))}
+                    })}
+            </ul>
+            </div>
+        ))}
+      </div>
   </div>
 )
 }

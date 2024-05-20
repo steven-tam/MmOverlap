@@ -1,7 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
-import all_courses from "../../../jsonGenerator/allCourses.json";
-import course_names from "../../../jsonGenerator/courseNames.json";
-import { Navigate, useNavigate, redirect } from "react-router-dom";
+import all_courses from "../../../backend/data/allCourses.json";
+import course_names from "../../../backend/data/courseNames.json";
+import {useNavigate} from "react-router-dom";
 import CourseLists from "./CourseLists";
 
 
