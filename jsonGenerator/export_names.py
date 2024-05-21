@@ -1,5 +1,5 @@
 import json
-f = open('allPrograms.json')
+f = open('allMajors.json')
 data = json.load(f)
 def exportMods(json_data):
     file_name = "programNames.json"
