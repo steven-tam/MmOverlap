@@ -1,8 +1,8 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
-import all_progs from "../../../backend/data/allMajors.json";
-import prog_names from "../../../backend/data/programNames.json";
 import {useNavigate} from "react-router-dom";
+// import all_progs from "../../../backend/data/allMajors.json";
+// import prog_names from "../../../backend/data/programNames.json";
 
 
 type Program = {
@@ -14,6 +14,8 @@ type Program = {
 };
 
 export default function AutoCompleteSearchBar() {
+  const baseUrl = 'http://localhost:3001/api/'
+  var prog_names:string[] 
   const [query, setQuery] = useState(""); // Makes space bar appear with user inpu
   const [searchResults, setSearchResults] = useState<Program[]>([]); // Displays / renders search results
   const [selectedProgramIndex, setSelectedProgramIndex] = useState<number>(-1); // Tracks selected index for display / selection
@@ -21,7 +23,31 @@ export default function AutoCompleteSearchBar() {
   // Only used to "tell" the search bar what programs there are, setPrograms slightly deceivng
   const [programs, setPrograms] = useState<Program[]>([]);
   useEffect(() => {
-    setPrograms(all_progs as Program[]); // Type cast data as a program
+    // Request allMajors from Server
+    fetch(baseUrl + "allMajors")
+    .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setPrograms(data as Program[])
+      })
+
+      // Request programNames from Server
+      fetch(baseUrl + "programNames")
+    .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        prog_names = (data as string[])
+      })
+
+    // setPrograms(all_progs as Program[]); // Type cast data as a program
   }, []);
 
   // Used to take user data from search bar input
@@ -79,6 +105,7 @@ export default function AutoCompleteSearchBar() {
 
   // Redirects user to course selection page once a valid major is entered
   function coursePageRedirect(program_name: string){
+
     const string_names = (prog_names as string[])
 
     for(let i = 0; i < string_names.length; i++){

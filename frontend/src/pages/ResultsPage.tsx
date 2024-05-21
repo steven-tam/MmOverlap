@@ -327,6 +327,7 @@ function createSortedOverlap(lastObjChecklist:any){
         return []
     }
     else{
+
         const allLastObjs = allPrograms.map(prog => {
             if (toggle){
                 const validCourses = JSON.parse(lastObjChecklist.validCourses) ? JSON.parse(lastObjChecklist.validCourses): []
@@ -338,8 +339,9 @@ function createSortedOverlap(lastObjChecklist:any){
                 return checkList[checkList.length-1] //lastObj
             }
         })
-        const relevantLastObjs = allLastObjs.filter(lastObj => {return lastObj.curCreditsInProgram > 0})
-        const sortByOverlap = relevantLastObjs.sort((a , b) => {return b.curCreditsInProgram - a.curCreditsInProgram})
+
+        const relevantLastObjs = allLastObjs.filter(lastObj => {return lastObj.curCreditsInProgram > 0}) // Filters out programs with no overlap 
+        const sortByOverlap = relevantLastObjs.sort((a , b) => {return b.curCreditsInProgram - a.curCreditsInProgram}) // Sort by ascending to decending
     
         return sortByOverlap
     }

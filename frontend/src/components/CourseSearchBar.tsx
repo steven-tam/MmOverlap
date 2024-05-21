@@ -18,6 +18,8 @@ type prop = {
 
 
 export default function AutoCompleteSearchBar({selectedProgram}: prop) {
+  const baseUrl = 'http://localhost:3001/api/'
+  var course_names:string[] 
   const [query, setQuery] = useState(""); // Makes space bar appear with user input
   const [searchResults, setSearchResults] = useState<Course[]>([]); // Displays / renders search results
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(-1); // Tracks selected index for display / selection
@@ -27,7 +29,31 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
   // Only used to "tell" the search bar what courses there are, setCourses slightly deceivng
   const [courses, setCourses] = useState<Course[]>([]);
   useEffect(() => {
-    setCourses(all_courses as Course[]); // Type cast data as a course
+    // Request allCourses from Server
+    fetch(baseUrl + "allCourses")
+    .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(all_courses => {
+        setCourses(all_courses as Course[])
+      })
+
+      // Request courseNames from Server
+      fetch(baseUrl + "courseNames")
+    .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(courseCodes => {
+        course_names = (courseCodes as string[])
+      })
+
+    // setCourses(all_courses as Course[]); // Type cast data as a course
   }, []);
 
   // Used to take user data from search bar input
