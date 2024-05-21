@@ -1,6 +1,7 @@
 import ChartResults from '../components/ChartResults';
 import CoursesData from "../../../backend/data/allCourses.json";
 import ProgramData from "../../../backend/data/allMajors.json";
+import {useState} from 'react';
 
 type Program = {
     id: number; // Index in search bar, see handleProgramClick / handleKeyDown
@@ -20,6 +21,7 @@ type Course = {
 
 
 function ResultPage() {
+    const [toggle, setToggle] = useState(false);
   let program_selected = sessionStorage.getItem("program_selected");
   let courses_selected = sessionStorage.getItem("courses_selected");
   const yourCourses = courses_selected != null ? JSON.parse(courses_selected) : [] //Fixes string or null type error when parsing
@@ -27,6 +29,10 @@ function ResultPage() {
   const allPrograms = ProgramData as Program[] //type casts programData
   const allCourses = CoursesData as Course[] //type casts coursesData
   var creditCounter = 0;
+
+  function handleToggle(){
+    setToggle(!toggle)
+  }
 
   function calculateTotalCredits(courseIds: string[], totalCredits: number){
     totalCredits = 0 // resets counter when you revise your courses
@@ -125,6 +131,12 @@ function checkConditions(condition:string, values:any[], storeCourses: string[],
                 if(storeCourses.length >= minCourses){
                     subRuleObj[name] = 'True'
                 }
+                break;
+
+            case "allOf":
+                break;
+
+            case "anyOf":
                 break;
 
         default: 
@@ -316,10 +328,15 @@ function createSortedOverlap(lastObjChecklist:any){
     }
     else{
         const allLastObjs = allPrograms.map(prog => {
-            const validCourses = JSON.parse(lastObjChecklist.validCourses) ? JSON.parse(lastObjChecklist.validCourses): []
-            const checkList = createChecklist(prog, validCourses)
-            
-            return checkList[checkList.length-1] //lastObj
+            if (toggle){
+                const validCourses = JSON.parse(lastObjChecklist.validCourses) ? JSON.parse(lastObjChecklist.validCourses): []
+                const checkList = createChecklist(prog, validCourses)
+                return checkList[checkList.length-1] //lastObj
+            }
+            else{
+                const checkList = createChecklist(prog, yourCourses)
+                return checkList[checkList.length-1] //lastObj
+            }
         })
         const relevantLastObjs = allLastObjs.filter(lastObj => {return lastObj.curCreditsInProgram > 0})
         const sortByOverlap = relevantLastObjs.sort((a , b) => {return b.curCreditsInProgram - a.curCreditsInProgram})
@@ -341,6 +358,12 @@ return (
         <p className='text-lg font-bold'>Credits In Your Program: {lastObjChecklist.curCreditsInProgram}</p>
         <p className='text-lg font-bold'>Max Credits In Your Program: {maxCreditsProgram}</p>
     </div>
+     
+    <button onClick={handleToggle} className={`toggle-button ${toggle ? 'on' : 'off'}`}>
+    {toggle ? 'Show All Courses' : 'Show Major Courses'}
+    </button>
+   
+    
     <ChartResults 
       selectedProgram={yourProgram} 
       sortedByOverlap={sortedByOverlap}
