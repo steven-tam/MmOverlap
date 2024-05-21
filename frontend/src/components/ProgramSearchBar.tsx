@@ -105,16 +105,14 @@ export default function AutoCompleteSearchBar() {
 
   // Redirects user to course selection page once a valid major is entered
   function coursePageRedirect(program_name: string){
+    const string_names = prog_names ? prog_names : []
 
-    const string_names = (prog_names as string[])
-
-    for(let i = 0; i < string_names.length; i++){
-      if(program_name == string_names[i]){
-        sessionStorage.setItem("program_selected", program_name)
+    if (string_names.includes(program_name)){
+      sessionStorage.setItem("program_selected", program_name)
         nav("/selectCourses")
         location.reload()
-      }
     }
+    
   }
 
   return (
