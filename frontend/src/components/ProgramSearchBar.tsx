@@ -1,8 +1,8 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import ProgramLists from "./ProgramsLists";
 import {useNavigate} from "react-router-dom";
-// import all_progs from "../../../backend/data/allMajors.json";
-// import prog_names from "../../../backend/data/programNames.json";
+import all_progs from "../data/allMajors.json";
+import prog_names from "../data/programNames.json";
 
 
 type Program = {
@@ -21,33 +21,34 @@ export default function AutoCompleteSearchBar() {
   const [programDescription, setProgramDescription] = useState<string>(''); // // Stores cdProgramDescr for chosen program
   // Only used to "tell" the search bar what programs there are, setPrograms slightly deceivng
   const [programs, setPrograms] = useState<Program[]>([]);
-  const [prog_names, setProg_names] = useState<string[]>([])
+  const [progNames, setProgNames] = useState<string[]>([])
   useEffect(() => {
-    // Request allMajors from Server
-    fetch(baseUrl + "allMajors")
-    .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setPrograms(data as Program[])
-      })
+    // // Request allMajors from Server
+    // fetch(baseUrl + "allMajors")
+    // .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     setPrograms(data as Program[])
+    //   })
 
-      // Request programNames from Server
-      fetch(baseUrl + "programNames")
-    .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setProg_names(data as string[])
-      })
+    //   // Request programNames from Server
+    //   fetch(baseUrl + "programNames")
+    // .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     setProg_names(data as string[])
+    //   })
 
-    // setPrograms(all_progs as Program[]); // Type cast data as a program
+    setPrograms(all_progs as Program[]); // Type cast data as a program
+    setProgNames(prog_names as string[]);
   }, []);
   
   // Used to take user data from search bar input
@@ -105,7 +106,7 @@ export default function AutoCompleteSearchBar() {
 
   // Redirects user to course selection page once a valid major is entered
   function coursePageRedirect(program_name: string){
-    const string_names = prog_names ? prog_names : []
+    const string_names = progNames ? progNames : []
     if (string_names.includes(program_name)){
       sessionStorage.setItem("program_selected", program_name)
         nav("/selectCourses")

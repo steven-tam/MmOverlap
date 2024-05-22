@@ -1,6 +1,6 @@
 import ChartResults from '../components/ChartResults';
-// import CoursesData from "../../../backend/data/allCourses.json";
-// import ProgramData from "../../../backend/data/allMajors.json";
+import CoursesData from "../data/allCourses.json";
+import ProgramData from "../data/allMajors.json";
 import {useState, useEffect} from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -40,27 +40,30 @@ function ResultPage() {
   
 useEffect(()=>{
 
-    fetch(baseUrl + "allMajors")
-  .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      setAllPrograms(data as Program[])
-    })
+//     fetch(baseUrl + "allMajors")
+//   .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Network response was not ok');
+//       }
+//       return response.json();
+//     })
+//     .then(data => {
+//       setAllPrograms(data as Program[])
+//     })
 
-    fetch(baseUrl + "allCourses")
-    .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(all_courses => {
-        setAllCourses(all_courses as Course[])
-      })
+//     fetch(baseUrl + "allCourses")
+//     .then(response => {
+//         if (!response.ok) {
+//           throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//       })
+//       .then(all_courses => {
+//         setAllCourses(all_courses as Course[])
+//       })
+setAllCourses(CoursesData as Course[])
+setAllPrograms(ProgramData as Program[])
+
 }, [])
   
 
@@ -342,7 +345,7 @@ function createChecklist(programObj: any, yourCourses: string[]){
     const uniqueValidCourses= validCourses.filter((item,index) => validCourses.indexOf(item) == index) // Removes Duplicates
     const currCredits = calculateCredits(uniqueValidCourses).toString() // Parsing to string for consistency
     
-    const customInfoObj = {"major": programObj.catalogDisplayName ,"curCreditsInProgram": currCredits, "validCourses": JSON.stringify(uniqueValidCourses), "programMaxCredits": programObj.customFields.cdProgramCreditsProgramMax} as customInfoObj
+    const customInfoObj = {"major": programObj.catalogDisplayName ,"curCreditsInProgram": currCredits, "validCourses": JSON.stringify(uniqueValidCourses), "programMaxCredits": programObj.customFields.cdProgramCreditsProgramMax} as customInfoObj //fixes value is type unknown error in line 416
     checklist.push(customInfoObj)
 
     return checklist
@@ -400,7 +403,7 @@ return  (
     </div>
 
     <button onClick={handleToggle} className={`toggle-button ${toggle ? 'on' : 'off'}`}>
-    {toggle ? 'Show All Courses' : 'Show Major Courses'}
+    {toggle ? 'Show All Courses' : 'Show Courses in Major'}
     </button>
 
     <ChartResults selectedProgram={yourProgram} sortedByOverlap={sortedByOverlap} />

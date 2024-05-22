@@ -1,6 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
-// import all_courses from "../../../backend/data/allCourses.json";
-// import course_names from "../../../backend/data/courseNames.json";
+import all_courses from "../data/allCourses.json";
+import course_names from "../data/courseNames.json";
 import {useNavigate} from "react-router-dom";
 import CourseLists from "./CourseLists";
 
@@ -24,36 +24,37 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(-1); // Tracks selected index for display / selection
   const [selections, setSelections] = useState<string[]>([]);   // Tracks courses selected by user
   const [selectionsId, setSelectionsId] = useState<string[]>([]);   // Tracks courses selected by user
-  const [course_names, setCourse_names] = useState<string[]>([])
+  const [courseNames, setCourseNames] = useState<string[]>([])
 
   // Only used to "tell" the search bar what courses there are, setCourses slightly deceivng
   const [courses, setCourses] = useState<Course[]>([]);
   useEffect(() => {
-    // Request allCourses from Server
-    fetch(baseUrl + "allCourses")
-    .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(all_courses => {
-        setCourses(all_courses as Course[])
-      })
+    // // Request allCourses from Server
+    // fetch(baseUrl + "allCourses")
+    // .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(all_courses => {
+    //     setCourses(all_courses as Course[])
+    //   })
 
-      // Request courseNames from Server
-      fetch(baseUrl + "courseNames")
-    .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(courseCodes => {
-        setCourse_names(courseCodes as string[])
-      })
+    //   // Request courseNames from Server
+    //   fetch(baseUrl + "courseNames")
+    // .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok');
+    //     }
+    //     return response.json();
+    //   })
+    //   .then(courseCodes => {
+    //     setCourse_names(courseCodes as string[])
+    //   })
 
-    // setCourses(all_courses as Course[]); // Type cast data as a course
+    setCourses(all_courses as Course[]); // Type cast data as a course
+    setCourseNames(course_names as string[]);
   }, []);
 
   // Used to take user data from search bar input
@@ -78,15 +79,15 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
   // Ensures a user has provided a valid code
   function checkValidCode(code: string){
     let start = 0;
-    let end = course_names.length - 1;
+    let end = courseNames.length - 1;
     while(start < end){
       let mid = (start + end)>>1;
       console.log(start,mid,end);
-      if(course_names[mid].localeCompare(code) == 0) return true;
-      else if(course_names[mid].localeCompare(code) < 0) start = mid + 1;
+      if(courseNames[mid].localeCompare(code) == 0) return true;
+      else if(courseNames[mid].localeCompare(code) < 0) start = mid + 1;
       else end = mid - 1;
     }
-    if(course_names[start].localeCompare(code) == 0) return true;
+    if(courseNames[start].localeCompare(code) == 0) return true;
     alert(`Invalid course!`);
     return false;
   }
