@@ -4,33 +4,25 @@ import ProgramData from "../data/allMajors.json";
 import {useState, useEffect} from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-type Program = {
-    id: number; // Index in search bar, see handleProgramClick / handleKeyDown
-    catalogDisplayName: string;
-    requisites: any;
+  type Course = {
+    id: string; 
+    code: string; 
+    longName: string; 
+    credits: { numberOfCredits: number; };
   };
 
-type Course = {
-    id: string;
-    code: string;
-    longName: string;
-    credits: {
-        numberOfCredits: number;
-    };
-};
-
 type customInfoObj = {
-    major: string ,
-    curCreditsInProgram: string, 
-    validCourses: string, 
-    programMaxCredits: string
+    major: any; 
+    curCreditsInProgram: string; 
+    validCourses: string; 
+    programMaxCredits: any;
 }
 
 
 function ResultPage() {
-    const baseUrl = 'http://localhost:3001/api/';
+    // const baseUrl = 'http://localhost:3001/api/';
     const [toggle, setToggle] = useState(false);
-    const [allPrograms, setAllPrograms] = useState<Program[]>([]);
+    const [allPrograms, setAllPrograms] = useState<any>([]);
     const [allCourses, setAllCourses] = useState<Course[]>([]);
   let program_selected = sessionStorage.getItem("program_selected");
   let courses_selected = sessionStorage.getItem("courses_selected");
@@ -62,7 +54,7 @@ useEffect(()=>{
 //         setAllCourses(all_courses as Course[])
 //       })
 setAllCourses(CoursesData as Course[])
-setAllPrograms(ProgramData as Program[])
+setAllPrograms(ProgramData)
 
 }, [])
   
@@ -352,7 +344,7 @@ function createChecklist(programObj: any, yourCourses: string[]){
 }
 
 function checkRequirements(yourProgram: string){
-    const getProgramObj = yourProgram != 'Undecided' ? allPrograms.find(p => p.catalogDisplayName == yourProgram): false 
+    const getProgramObj = yourProgram != 'Undecided' ? allPrograms.find((p:any) => p.catalogDisplayName == yourProgram): false 
   
     if (getProgramObj){
         return createChecklist(getProgramObj, yourCourses)
@@ -369,7 +361,7 @@ function createSortedOverlap(lastObjChecklist:any){
     }
     else{
 
-        const allLastObjs = allPrograms.map(prog => {
+        const allLastObjs = allPrograms.map((prog:any) => {
             if (toggle){
                 const validCourses = JSON.parse(lastObjChecklist.validCourses) ? JSON.parse(lastObjChecklist.validCourses): []
                 const checkList = createChecklist(prog, validCourses)
@@ -381,8 +373,8 @@ function createSortedOverlap(lastObjChecklist:any){
             }
         })
 
-        const relevantLastObjs = allLastObjs.filter(lastObj => {return lastObj.curCreditsInProgram > 0}) // Filters out programs with no overlap 
-        const sortByOverlap = relevantLastObjs.sort((a , b) => {return b.curCreditsInProgram - a.curCreditsInProgram}) // Sort by ascending to decending
+        const relevantLastObjs = allLastObjs.filter((lastObj:customInfoObj) => {return Number(lastObj.curCreditsInProgram) > 0}) // Filters out programs with no overlap 
+        const sortByOverlap = relevantLastObjs.sort((a:any , b:any) => {return b.curCreditsInProgram - a.curCreditsInProgram}) // Sort by ascending to decending
     
         return sortByOverlap
     }

@@ -5,23 +5,17 @@ import all_progs from "../data/allMajors.json";
 import prog_names from "../data/programNames.json";
 
 
-type Program = {
-  ind: number; // Index in search bar, see handleProgramClick / handleKeyDown
-  catalogDisplayName: string;
-  customFields:{
-    cdProgramDescr: string;
-  };
-};
 
 export default function AutoCompleteSearchBar() {
-  const baseUrl = 'http://localhost:3001/api/'
+  // const baseUrl = 'http://localhost:3001/api/'
   const [query, setQuery] = useState(""); // Makes space bar appear with user inpu
-  const [searchResults, setSearchResults] = useState<Program[]>([]); // Displays / renders search results
+  const [searchResults, setSearchResults] = useState<any>([]); // Displays / renders search results
   const [selectedProgramIndex, setSelectedProgramIndex] = useState<number>(-1); // Tracks selected index for display / selection
   const [programDescription, setProgramDescription] = useState<string>(''); // // Stores cdProgramDescr for chosen program
   // Only used to "tell" the search bar what programs there are, setPrograms slightly deceivng
-  const [programs, setPrograms] = useState<Program[]>([]);
+  const [programs, setPrograms] = useState<any>([]);
   const [progNames, setProgNames] = useState<string[]>([])
+
   useEffect(() => {
     // // Request allMajors from Server
     // fetch(baseUrl + "allMajors")
@@ -47,7 +41,7 @@ export default function AutoCompleteSearchBar() {
     //     setProg_names(data as string[])
     //   })
 
-    setPrograms(all_progs as Program[]); // Type cast data as a program
+    setPrograms(all_progs); // Type cast data as a program
     setProgNames(prog_names as string[]);
   }, []);
   
@@ -62,7 +56,7 @@ export default function AutoCompleteSearchBar() {
     setQuery(event.target.value);
     setSearchResults(
       programs.filter(
-        (program) => 
+        (program:any) => 
           program.catalogDisplayName
             .toLowerCase()
             .includes(event.target.value.toLowerCase()) // Filters search results accordingly
@@ -97,7 +91,7 @@ export default function AutoCompleteSearchBar() {
   }
 
   // Allows the user to click element to select
-  function handleProgramClick(program: Program) {
+  function handleProgramClick(program: any) {
     // Returns to default search after selection
     setQuery(program.catalogDisplayName);
     setProgramDescription(program.customFields.cdProgramDescr)

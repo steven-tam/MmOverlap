@@ -5,10 +5,17 @@ import {useNavigate} from "react-router-dom";
 import CourseLists from "./CourseLists";
 
 
+// type Course = {
+//   id: string
+//   ind: number; // Index in search bar, see handleCourseClick / handleKeyDown
+//   code: string; // Course code
+// };
+
 type Course = {
-  id: string
-  ind: number; // Index in search bar, see handleCourseClick / handleKeyDown
-  code: string; // Course code
+  id: string; 
+  code: string; 
+  longName: string; 
+  credits: { numberOfCredits: number; };
 };
 
 type prop = {
@@ -18,7 +25,7 @@ type prop = {
 
 
 export default function AutoCompleteSearchBar({selectedProgram}: prop) {
-  const baseUrl = 'https://gopher-major-planner.onrender.com';
+  // const baseUrl = 'https://gopher-major-planner.onrender.com';
   const [query, setQuery] = useState(""); // Makes space bar appear with user input
   const [searchResults, setSearchResults] = useState<Course[]>([]); // Displays / renders search results
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(-1); // Tracks selected index for display / selection
@@ -53,8 +60,8 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
     //     setCourse_names(courseCodes as string[])
     //   })
 
-    setCourses(all_courses as Course[]); // Type cast data as a course
-    setCourseNames(course_names as string[]);
+    setCourses(all_courses); // Type cast data as a course
+    setCourseNames(course_names);
   }, []);
 
   // Used to take user data from search bar input

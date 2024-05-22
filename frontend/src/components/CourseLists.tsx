@@ -3,10 +3,11 @@ import { useEffect } from "react"
 // Class used to form the reccomended list below a user search in the auto-complete search bar
 
 type Course = {
-    id: string
-    ind: number
-    code: string
-}
+    id: string; 
+    code: string; 
+    longName: string; 
+    credits: { numberOfCredits: number; };
+  };
 
 type CourseListProps= {
     selectedCourseIndex: number
