@@ -18,7 +18,7 @@ type prop = {
 
 
 export default function AutoCompleteSearchBar({selectedProgram}: prop) {
-  const baseUrl = 'http://localhost:3001/api/'
+  const baseUrl = 'https://gopher-major-planner.onrender.com';
   const [query, setQuery] = useState(""); // Makes space bar appear with user input
   const [searchResults, setSearchResults] = useState<Course[]>([]); // Displays / renders search results
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(-1); // Tracks selected index for display / selection
