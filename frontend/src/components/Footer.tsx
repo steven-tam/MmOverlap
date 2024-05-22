@@ -8,9 +8,9 @@ const Footer = () => {
         <LeadDevCard name="Steven" 
           title='Website/Team Lead' 
           image={defaultImg} 
-          githubLink='#' 
+          githubLink='https://github.com/stevennTam/' 
           portfolioLink='#'
-          linkedinLink='#'
+          linkedinLink='https://www.linkedin.com/in/steven-tam-a29239180/'
           />
         <LeadDevCard 
           name="Sam" 
@@ -59,7 +59,7 @@ const Footer = () => {
           </span>
           <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
               <li>
-                  <a href="https://github.com/chaunmt/Interactive-Prerequisite-Flowchart" className="hover:underline me-4 md:me-6">Interactive Prerequisite-Flowchart</a>
+                  <a href="https://github.com/chaunmt/Interactive-Prerequisite-Flowchart" target="_blank" className="hover:underline me-4 md:me-6">Interactive Prerequisite-Flowchart</a>
               </li>
               <li>
                   <a href="https://www.socialcoding.net/" target="_blank" className="hover:underline me-4 md:me-6">Social Coding Club</a>

@@ -20,9 +20,9 @@ function LeadDevCard({name, title ,image, linkedinLink ,githubLink, portfolioLin
             <h2 className="text-center text-2xl font-semibold mt-3 text-light-maroon">{name}</h2>
             <p className="text-center text-gray-600 mt-1">{title}</p>
             <div className="flex justify-center mt-3">
-                <a href={linkedinLink} className="mx-3"><img src={linkedinIcon} alt='Linkedin'></img></a>
-                <a href={githubLink} className="mx-3"><img src={githubIcon} alt='Github'></img></a>
-                <a href={portfolioLink} className="mx-3"><img src={portfolioIcon} alt='Portfolio'></img></a>
+                <a href={linkedinLink} target="_blank" className="mx-3"><img src={linkedinIcon} alt='Linkedin'></img></a>
+                <a href={githubLink} target="_blank" className="mx-3"><img src={githubIcon} alt='Github'></img></a>
+                <a href={portfolioLink} target="_blank" className="mx-3"><img src={portfolioIcon} alt='Portfolio'></img></a>
             </div>
         </div>
     </div>
