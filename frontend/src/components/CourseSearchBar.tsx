@@ -60,7 +60,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
     //     setCourse_names(courseCodes as string[])
     //   })
 
-    setCourses(all_courses); // Type cast data as a course
+    setCourses(all_courses as Course[]); // Type cast data as a course
     setCourseNames(course_names);
   }, []);
 
