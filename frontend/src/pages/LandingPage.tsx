@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import ProgramSearchBar from '../components/ProgramSearchBar'
 
 function LandingPage() {

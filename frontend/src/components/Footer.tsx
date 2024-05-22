@@ -1,6 +1,4 @@
-import React from 'react'
 import LeadDevCard from './LeadDevCard'
-import DevCard from './DevCard'
 const Footer = () => {
   const defaultImg= "https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/hotel-nikko-san-francisco/hotelnikkosf/mainimages/golden-gate-bridge-detailpage-hero.jpg?width=970&height=650"
   //https://picsum.photos/200

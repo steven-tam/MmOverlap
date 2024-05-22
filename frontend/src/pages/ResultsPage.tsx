@@ -19,8 +19,16 @@ type Course = {
     };
 };
 
+type customInfoObj = {
+    major: string ,
+    curCreditsInProgram: string, 
+    validCourses: string, 
+    programMaxCredits: string
+}
+
+
 function ResultPage() {
-    const baseUrl = process.env.REACT_APP_BASE_URL;
+    const baseUrl = 'http://localhost:3001/api/';
     const [toggle, setToggle] = useState(false);
     const [allPrograms, setAllPrograms] = useState<Program[]>([]);
     const [allCourses, setAllCourses] = useState<Course[]>([]);
@@ -334,7 +342,7 @@ function createChecklist(programObj: any, yourCourses: string[]){
     const uniqueValidCourses= validCourses.filter((item,index) => validCourses.indexOf(item) == index) // Removes Duplicates
     const currCredits = calculateCredits(uniqueValidCourses).toString() // Parsing to string for consistency
     
-    const customInfoObj = {"major": programObj.catalogDisplayName ,"curCreditsInProgram": currCredits, "validCourses": JSON.stringify(uniqueValidCourses), "programMaxCredits": programObj.customFields.cdProgramCreditsProgramMax}
+    const customInfoObj = {"major": programObj.catalogDisplayName ,"curCreditsInProgram": currCredits, "validCourses": JSON.stringify(uniqueValidCourses), "programMaxCredits": programObj.customFields.cdProgramCreditsProgramMax} as customInfoObj
     checklist.push(customInfoObj)
 
     return checklist
@@ -402,11 +410,11 @@ return  (
         <div key={index}>
         <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{element.requirementTitle}</h2>
         <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
-            {Object.entries(element).map(([key, value], idx) => {
+            {Object.entries(element as customInfoObj).map(([key, value]) => {
             if (!['requirementTitle', 'validCourses', 'curCreditsInProgram', 'programMaxCredits', 'major'].includes(key) && !key.includes('?')) {
                 return (
                 <li key={uuidv4()} className="flex items-center">
-                    <svg className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${value.includes("True") ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${value.includes("True") ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" view-Box={"0 0 20 20"}>
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
                     </svg>
                     {key}
@@ -415,7 +423,7 @@ return  (
             } else if (key.includes("?")) {
                 const k = key.slice(0, -1);
                 const parseSubRules = JSON.parse(value);
-                const subRules = parseSubRules[1].map((subRule) => {
+                const subRules = parseSubRules[1].map((subRule:any) => {
                 const subKey = Object.keys(subRule)[0];
                 return (
                     <li key={uuidv4()} className="flex items-center">
