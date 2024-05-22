@@ -15,13 +15,13 @@ type Program = {
 
 export default function AutoCompleteSearchBar() {
   const baseUrl = 'http://localhost:3001/api/'
-  var prog_names:string[] 
   const [query, setQuery] = useState(""); // Makes space bar appear with user inpu
   const [searchResults, setSearchResults] = useState<Program[]>([]); // Displays / renders search results
   const [selectedProgramIndex, setSelectedProgramIndex] = useState<number>(-1); // Tracks selected index for display / selection
   const [programDescription, setProgramDescription] = useState<string>(''); // // Stores cdProgramDescr for chosen program
   // Only used to "tell" the search bar what programs there are, setPrograms slightly deceivng
   const [programs, setPrograms] = useState<Program[]>([]);
+  const [prog_names, setProg_names] = useState<string[]>([])
   useEffect(() => {
     // Request allMajors from Server
     fetch(baseUrl + "allMajors")
@@ -44,12 +44,12 @@ export default function AutoCompleteSearchBar() {
         return response.json();
       })
       .then(data => {
-        prog_names = (data as string[])
+        setProg_names(data as string[])
       })
 
     // setPrograms(all_progs as Program[]); // Type cast data as a program
   }, []);
-
+  
   // Used to take user data from search bar input
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -106,7 +106,6 @@ export default function AutoCompleteSearchBar() {
   // Redirects user to course selection page once a valid major is entered
   function coursePageRedirect(program_name: string){
     const string_names = prog_names ? prog_names : []
-
     if (string_names.includes(program_name)){
       sessionStorage.setItem("program_selected", program_name)
         nav("/selectCourses")
@@ -122,7 +121,7 @@ export default function AutoCompleteSearchBar() {
           
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg className="w-4 h-4 text-gray-500 dark:text-gray-400 z-10" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                 </svg>
             </div>
             

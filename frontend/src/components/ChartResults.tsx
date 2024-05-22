@@ -11,11 +11,8 @@ type props = {
 }
 
 function ChartResults({selectedProgram, sortedByOverlap}: props) {
-    console.log("Program Selected in ChartResults:", selectedProgram)
-    console.log("sortedByOverlap", sortedByOverlap)
-    const labelsArray = sortedByOverlap.map(obj => obj.major).length > 0 ? sortedByOverlap.map(obj => obj.major) : [selectedProgram, "NO PROGRAM/COURSES SELECTED", "NAVIGATE TO HOME OR SELECT COURSES", "AND ADD PROGRAM/COURSES!" ]
+    const labelsArray = sortedByOverlap.map(obj => obj.major).length > 0 ? sortedByOverlap.map(obj => obj.major) : [selectedProgram, "MISSING PROGRAM OR COURSES IN YOUR MAJOR", "PLEASE ADD PROGRAM/COURSES IN YOUR MAJOR", "AND USE DESKTOP FOR BEST EXPERIENCE" ]
     const creditsOfOverlap = sortedByOverlap.map(obj => obj.curCreditsInProgram).length > 0 ? sortedByOverlap.map(obj => obj.curCreditsInProgram) : [3, 2, 1]
-    console.log("labelArray:", labelsArray)
     // legend: {
     //     position: 'right' as const,
     // }

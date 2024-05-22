@@ -37,7 +37,7 @@ export default function CourseLists({courses, selectedCourseIndex, handleCourseC
     return (
         <div className="bg-white max-h-96 overflow-y-scroll">
             {courses.map((course,index) => (
-                <div key={course.ind} className={`${selectedCourseIndex === index ? "bg-gray-200" : ""} py-2 px-4 flex items-center justify-between gap-8 transition-colors duration-150 ease-in-out hover:bg-green-300 rounded cursor-pointer`}
+                <div key={index} className={`${selectedCourseIndex === index ? "bg-gray-200" : ""} py-2 px-4 flex items-center justify-between gap-8 transition-colors duration-150 ease-in-out hover:bg-green-300 rounded cursor-pointer`}
                 id={`course-${index}`}
                 onClick={() => handleCourseClick(course)}>
                     <p>{course.code}</p>

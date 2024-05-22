@@ -1,7 +1,8 @@
 import ChartResults from '../components/ChartResults';
-import CoursesData from "../../../backend/data/allCourses.json";
-import ProgramData from "../../../backend/data/allMajors.json";
-import {useState} from 'react';
+// import CoursesData from "../../../backend/data/allCourses.json";
+// import ProgramData from "../../../backend/data/allMajors.json";
+import {useState, useEffect} from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 type Program = {
     id: number; // Index in search bar, see handleProgramClick / handleKeyDown
@@ -18,16 +19,45 @@ type Course = {
     };
 };
 
-
-
 function ResultPage() {
+    const baseUrl = process.env.REACT_APP_BASE_URL;
     const [toggle, setToggle] = useState(false);
+    const [allPrograms, setAllPrograms] = useState<Program[]>([]);
+    const [allCourses, setAllCourses] = useState<Course[]>([]);
   let program_selected = sessionStorage.getItem("program_selected");
   let courses_selected = sessionStorage.getItem("courses_selected");
   const yourCourses = courses_selected != null ? JSON.parse(courses_selected) : [] //Fixes string or null type error when parsing
   const yourProgram = program_selected != null ? program_selected : "Undecided"
-  const allPrograms = ProgramData as Program[] //type casts programData
-  const allCourses = CoursesData as Course[] //type casts coursesData
+ 
+  
+useEffect(()=>{
+
+    fetch(baseUrl + "allMajors")
+  .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setAllPrograms(data as Program[])
+    })
+
+    fetch(baseUrl + "allCourses")
+    .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(all_courses => {
+        setAllCourses(all_courses as Course[])
+      })
+}, [])
+  
+
+
+
   var creditCounter = 0;
 
   function handleToggle(){
@@ -288,13 +318,13 @@ function createChecklist(programObj: any, yourCourses: string[]){
                             break;
 
                     default: 
-                        console.log("Condition Not Found:", condition)
+                    
                         break;
                 }
 
             }
             else{
-                console.log("Error!")
+                console.log("Condition Unsupported:", condition)
             }
         }
         checklist.push(checklistObj)
@@ -353,117 +383,70 @@ const lastObjChecklist = yourMajorChecklist[yourMajorChecklist.length-1]
 const maxCreditsProgram = lastObjChecklist.programMaxCredits ? lastObjChecklist.programMaxCredits : "N/A"
 const sortedByOverlap = createSortedOverlap(lastObjChecklist)
 
-return (
-  <div> 
-    <div className="">
-        <p className='text-lg font-bold'>Total Credits: {calculateTotalCredits(yourCourses, creditCounter)} </p>
-        <p className='text-lg font-bold'>Credits In Your Program: {lastObjChecklist.curCreditsInProgram}</p>
-        <p className='text-lg font-bold'>Max Credits In Your Program: {maxCreditsProgram}</p>
+return  (
+<div>
+    <div>
+    <p className='text-lg font-bold'>Total Credits: {calculateTotalCredits(yourCourses, creditCounter)}</p>
+    <p className='text-lg font-bold'>Credits In Your Program: {lastObjChecklist.curCreditsInProgram}</p>
+    <p className='text-lg font-bold'>Max Credits In Your Program: {maxCreditsProgram}</p>
     </div>
-     
+
     <button onClick={handleToggle} className={`toggle-button ${toggle ? 'on' : 'off'}`}>
     {toggle ? 'Show All Courses' : 'Show Major Courses'}
     </button>
-   
-    
-    <ChartResults 
-      selectedProgram={yourProgram} 
-      sortedByOverlap={sortedByOverlap}
-    />
-    <div>
-        {yourMajorChecklist.map((element, index) => (
-            <div key={index}>
-                <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{element.requirementTitle}</h2>
-                <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
-                    {Object.entries(element).map(([key, value], idx:number) => {
-                        if( key !== 'requirementTitle' && key !== 'validCourses' && key !== 'curCreditsInProgram' && key !== 'programMaxCredits' && !key.includes("?") && key != 'major'){
-                            if(value.includes("True")){
-                                return (
-                                    <li key={idx} className="flex items-center">
-                                        <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                        </svg>
-                                        {key}
-                                    </li>
-                                )
-                            }
-                            else{
-                                return (
-                                    <li key={idx} className="flex items-center">
-                                        <svg className="w-3.5 h-3.5 me-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                        </svg>
-                                        {key}
-                                    </li>
-                                )
-                            }
-                        } 
-                        else if (key.includes("?")){
-                            const k = key.substring(0, key.length-1) // Removes "?"
-                            const parseSubRules = JSON.parse(value) 
-                            var j = []
-                            for(const i in parseSubRules[1]){
-                                const obj = parseSubRules[1][i] 
-                                const subKey = Object.keys(obj)[0]  
-                                
-                                if(obj[subKey].includes("True")){
-                                    j.push(
-                                        <li key={idx} className="flex items-center">
-                                            <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                            </svg>
-                                            {subKey}
-                                        </li>
-                                    )
-                                }
-                                else{
-                                    j.push(
-                                        <li key={idx} className="flex items-center">
-                                            <svg className="w-3.5 h-3.5 me-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                            </svg>
-                                            {subKey}
-                                        </li>
-                                    )
-                                }
 
-                            }
-                            if(parseSubRules[0].includes("True")){
-                                return (
-                                    <div>
-                                        <li key={idx} className="flex items-center">
-                                            <svg className="w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                            </svg>
-                                            {k}
-                                        </li>
-                                        <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
-                                            {j.map(subRule => subRule)}
-                                        </ul>
-                                    </div>
-                                )
-                            }else{
-                                return (
-                                    <div>
-                                        <li key={idx} className="flex items-center">
-                                            <svg className="w-3.5 h-3.5 me-2 text-gray-500 dark:text-gray-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                                            </svg>
-                                            {k}
-                                        </li>
-                                        <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
-                                            {j.map(subRule => subRule)}
-                                        </ul>
-                                    </div>
-                                )
-                            }
-                        }
-                    })}
-            </ul>
-            </div>
-        ))}
-      </div>
-  </div>
+    <ChartResults selectedProgram={yourProgram} sortedByOverlap={sortedByOverlap} />
+
+    <div>
+    {yourMajorChecklist.map((element, index) => (
+        <div key={index}>
+        <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{element.requirementTitle}</h2>
+        <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
+            {Object.entries(element).map(([key, value], idx) => {
+            if (!['requirementTitle', 'validCourses', 'curCreditsInProgram', 'programMaxCredits', 'major'].includes(key) && !key.includes('?')) {
+                return (
+                <li key={uuidv4()} className="flex items-center">
+                    <svg className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${value.includes("True") ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                    </svg>
+                    {key}
+                </li>
+                );
+            } else if (key.includes("?")) {
+                const k = key.slice(0, -1);
+                const parseSubRules = JSON.parse(value);
+                const subRules = parseSubRules[1].map((subRule) => {
+                const subKey = Object.keys(subRule)[0];
+                return (
+                    <li key={uuidv4()} className="flex items-center">
+                    <svg className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${subRule[subKey].includes("True") ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                    </svg>
+                    {subKey}
+                    </li>
+                );
+                });
+
+                return (
+                <div key={uuidv4()}>
+                    <li className="flex items-center">
+                    <svg className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${parseSubRules[0].includes("True") ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                    </svg>
+                    {k}
+                    </li>
+                    <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
+                    {subRules}
+                    </ul>
+                </div>
+                );
+            }
+            })}
+        </ul>
+        </div>
+    ))}
+    </div>
+</div>
 )
 }
 

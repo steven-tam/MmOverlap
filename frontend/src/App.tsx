@@ -17,7 +17,6 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="selectCourses" element={<CoursePage />} />
           <Route path="showResults" element={<ResultsPage />} />
-          <Route path="Example" element={<ExamplePage />} />
         </Routes>
       </BrowserRouter>
       <Footer />

@@ -1,6 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
-import all_courses from "../../../backend/data/allCourses.json";
-import course_names from "../../../backend/data/courseNames.json";
+// import all_courses from "../../../backend/data/allCourses.json";
+// import course_names from "../../../backend/data/courseNames.json";
 import {useNavigate} from "react-router-dom";
 import CourseLists from "./CourseLists";
 
@@ -19,12 +19,12 @@ type prop = {
 
 export default function AutoCompleteSearchBar({selectedProgram}: prop) {
   const baseUrl = 'http://localhost:3001/api/'
-  var course_names:string[] 
   const [query, setQuery] = useState(""); // Makes space bar appear with user input
   const [searchResults, setSearchResults] = useState<Course[]>([]); // Displays / renders search results
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number>(-1); // Tracks selected index for display / selection
   const [selections, setSelections] = useState<string[]>([]);   // Tracks courses selected by user
   const [selectionsId, setSelectionsId] = useState<string[]>([]);   // Tracks courses selected by user
+  const [course_names, setCourse_names] = useState<string[]>([])
 
   // Only used to "tell" the search bar what courses there are, setCourses slightly deceivng
   const [courses, setCourses] = useState<Course[]>([]);
@@ -50,7 +50,7 @@ export default function AutoCompleteSearchBar({selectedProgram}: prop) {
         return response.json();
       })
       .then(courseCodes => {
-        course_names = (courseCodes as string[])
+        setCourse_names(courseCodes as string[])
       })
 
     // setCourses(all_courses as Course[]); // Type cast data as a course
