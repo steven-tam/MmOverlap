@@ -2,7 +2,7 @@ import ChartResults from '../components/ChartResults';
 import CoursesData from "../data/allCourses.json";
 import ProgramData from "../data/allMajors.json";
 import {useState, useEffect} from 'react';
-import { v4 as uuidv4 } from 'uuid';
+
 
   type Course = {
     id: string; 
@@ -201,14 +201,14 @@ function createChecklist(programObj: any, yourCourses: string[]){
             const ruleValue = rule.value ? rule.value : [] // Used for TYPE 2
 
             // Used in "completeVariableCoursesAndVariableCredits" and "completedAtLeastXOf"
-            var minCredits = rule.minCredits ? rule.minCredits : null;
-            var maxCredits = rule.maxCredits ? rule.maxCredits : null;
-            var minCourses = rule.minCourses ? rule.minCourses : null;
-            var maxCourses = rule.maxCourses ? rule.maxCourses : null;
+            const minCredits = rule.minCredits ? rule.minCredits : null;
+            const maxCredits = rule.maxCredits ? rule.maxCredits : null;
+            const minCourses = rule.minCourses ? rule.minCourses : null;
+            const maxCourses = rule.maxCourses ? rule.maxCourses : null;
             
 
             if(condition.includes("allOf")){ // Condition for handling type 1
-                var subRuleChecklist: any[] = []
+                let subRuleChecklist: any[] = []
                 
                 for(var i in subRules){
                     const subRule = subRules[i]
@@ -393,61 +393,101 @@ return  (
     <p className='text-lg font-bold'>Credits In Your Program: {lastObjChecklist.curCreditsInProgram}</p>
     <p className='text-lg font-bold'>Max Credits In Your Program: {maxCreditsProgram}</p>
     </div>
-
+    <p className='text-lg font-bold'>Show: </p>
     <button onClick={handleToggle} className={`toggle-button ${toggle ? 'on' : 'off'}`}>
-    {toggle ? 'Show All Courses' : 'Show Courses in Major'}
+    {toggle ? 'All Courses' : 'Courses in Your Major'}
     </button>
 
     <ChartResults selectedProgram={yourProgram} sortedByOverlap={sortedByOverlap} />
 
     <div>
-    {yourMajorChecklist.map((element, index) => (
-        <div key={index}>
-        <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">{element.requirementTitle}</h2>
-        <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
-            {Object.entries(element as customInfoObj).map(([key, value]) => {
-            if (!['requirementTitle', 'validCourses', 'curCreditsInProgram', 'programMaxCredits', 'major'].includes(key) && !key.includes('?')) {
-                return (
-                <li key={uuidv4()} className="flex items-center">
-                    <svg className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${value.includes("True") ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" view-Box={"0 0 20 20"}>
-                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                    </svg>
-                    {key}
-                </li>
-                );
-            } else if (key.includes("?")) {
-                const k = key.slice(0, -1);
-                const parseSubRules = JSON.parse(value);
-                const subRules = parseSubRules[1].map((subRule:any) => {
-                const subKey = Object.keys(subRule)[0];
-                return (
-                    <li key={uuidv4()} className="flex items-center">
-                    <svg className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${subRule[subKey].includes("True") ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                    </svg>
-                    {subKey}
+        {yourMajorChecklist.map((element, index) => (
+            <div key={`element-${index}`}>
+            <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">
+                {element.requirementTitle}
+            </h2>
+            <ul className="max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
+                {Object.entries(element as customInfoObj).map(([key, value]) => {
+                if (
+                    ![
+                    'requirementTitle',
+                    'validCourses',
+                    'curCreditsInProgram',
+                    'programMaxCredits',
+                    'major'
+                    ].includes(key) && !key.includes('?')
+                ) {
+                    return (
+                    <li key={`item-${index}-${key}`} className="flex items-center">
+                        <svg
+                        className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${
+                            value.includes('True')
+                            ? 'text-green-500 dark:text-green-400'
+                            : 'text-gray-500 dark:text-gray-400'
+                        }`}
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        >
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                        </svg>
+                        {key}
                     </li>
-                );
-                });
+                    );
+                } else if (key.includes('?')) {
+                    const k = key.slice(0, -1);
+                    const parseSubRules = JSON.parse(value);
+                    const subRules = parseSubRules[1].map((subRule: { [x: string]: string | string[]; }, subIndex: number) => {
+                    const subKey = Object.keys(subRule)[0];
+                    return (
+                        <li key={`subrule-${index}-${subIndex}-${subKey}`} className="flex items-center">
+                        <svg
+                            className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${
+                            subRule[subKey].includes('True')
+                                ? 'text-green-500 dark:text-green-400'
+                                : 'text-gray-500 dark:text-gray-400'
+                            }`}
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                        </svg>
+                        {subKey}
+                        </li>
+                    );
+                    });
 
-                return (
-                <div key={uuidv4()}>
-                    <li className="flex items-center">
-                    <svg className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${parseSubRules[0].includes("True") ? 'text-green-500 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
-                    </svg>
-                    {k}
-                    </li>
-                    <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
-                    {subRules}
-                    </ul>
-                </div>
-                );
-            }
-            })}
-        </ul>
-        </div>
-    ))}
+                    return (
+                    <div key={`subrules-${index}-${k}`}>
+                        <li className="flex items-center">
+                        <svg
+                            className={`w-3.5 h-3.5 me-2 flex-shrink-0 ${
+                            parseSubRules[0].includes('True')
+                                ? 'text-green-500 dark:text-green-400'
+                                : 'text-gray-500 dark:text-gray-400'
+                            }`}
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                        </svg>
+                        {k}
+                        </li>
+                        <ul className="ps-8 mt-2 space-y-1 list-disc list-inside">
+                        {subRules}
+                        </ul>
+                    </div>
+                    );
+                }
+                })}
+            </ul>
+            </div>
+        ))}
     </div>
 </div>
 )
