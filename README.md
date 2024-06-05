@@ -20,9 +20,6 @@ Gopher Major Planner serves as the solution for UofM students who plan on pursui
 
 Use desktop for best experience!
 ## Instructions for Running Locally
-We are still in development...
-Assuming no experience using react and node.js, start with these commands 
-using gitbash or equivalent:
 
 To run frontend:
 1. cd MmOverlap
