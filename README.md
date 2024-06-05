@@ -1,8 +1,8 @@
 # Gopher Major Planner
 Gopher Major Planner serves as the solution for UofM students who plan on pursuing a combination of majors and minors that exhibit significant overlap. It helps students make informed decisions regarding their majors, minors, and courses by offering tailored insights based on intended major and past coursework.
-
-<img width="947" alt="Screenshot 2024-03-19 170114" src="https://github.com/stevennTam/MmOverlap/assets/60487779/92e2594e-303e-491b-9f73-2edba1851319">
-<img width="954" alt="Screenshot 2024-05-19 150545" src="https://github.com/stevennTam/MmOverlap/assets/60487779/23f379e4-5ce0-45de-96a9-ce630a610401">
+<img width="718" alt="Screenshot 2024-06-04 225356" src="https://github.com/stevennTam/MmOverlap/assets/60487779/e5a82b3c-0c67-427e-918c-612dd1317a80">
+<img width="716" alt="Screenshot 2024-06-04 230144" src="https://github.com/stevennTam/MmOverlap/assets/60487779/08b1b3a9-6489-4d3f-b232-aca4633ba380">
+<img width="367" alt="Screenshot 2024-06-04 231134" src="https://github.com/stevennTam/MmOverlap/assets/60487779/b0a38a9d-2096-4cda-8f8d-fb934ef73e29">
 
 Use desktop for best experience!
 ## Instructions for Running Locally
