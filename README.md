@@ -1,5 +1,5 @@
 # Gopher Major Planner
-Gopher Major Planner serves as the solution for UofM students who plan on pursuing a combination of majors and minors that exhibit significant overlap. It helps students make informed decisions regarding their majors, minors, and courses by offering tailored insights based on intended major and past coursework.
+Gopher Major Planner is a tool for students at the University of Minnesota who are planning on pursuing a combination of majors and minors. It helps students make informed decisions regarding their majors, minors, and courses by offering tailored insights based on intended major, past/future coursework.
 
  
 <strong>Step 1: Enter Your Major</strong>
