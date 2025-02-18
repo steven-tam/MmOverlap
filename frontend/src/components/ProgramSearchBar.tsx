@@ -123,7 +123,7 @@ export default function AutoCompleteSearchBar() {
             <input
               type="text"
               id="search_bar"
-              className="w-full py-2 ps-10 border-gray-500 h-10 shadow-md focus:outline-none focus:ring-2 focus:ring-light-gold rounded peer"
+              className="w-full py-2 ps-10 border-gray-500 h-10 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-light-gold rounded peer"
               onChange={handleQueryChange}
               onKeyDown={handleKeyDown}
               value={query}

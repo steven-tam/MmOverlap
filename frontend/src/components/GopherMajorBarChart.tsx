@@ -1,7 +1,8 @@
-import GopherMajorBarChart from "../components/GopherMajorBarChart";
+import { useState, useEffect } from "react";
+import { Checklist } from "./Checklist";
+import { BarChart } from "./BarChart";
 import CoursesData from "../data/allCourses.json";
 import ProgramData from "../data/allMajors.json";
-import { useState, useEffect } from "react";
 
 type Course = {
   id: string;
@@ -17,66 +18,34 @@ type customInfoObj = {
   programMaxCredits: any;
 };
 
-function ResultPage() {
-  // const baseUrl = 'http://localhost:3001/api/';
-  const [toggle, setToggle] = useState(false);
+type GopherMajorBarChartProps = {
+  myMajor?: string;
+  myCourseIDs: string[];
+  disableChecklist?: boolean;
+  disableBarChart?: boolean;
+  onlyMajorCourses?: boolean;
+};
+
+function GopherMajorBarChart({
+  myMajor = "",
+  myCourseIDs,
+  disableBarChart = false,
+  disableChecklist = false,
+  onlyMajorCourses = false,
+}: GopherMajorBarChartProps) {
   const [allPrograms, setAllPrograms] = useState<any>([]);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
-  let program_selected = sessionStorage.getItem("program_selected");
-  let courses_selected = sessionStorage.getItem("courses_selected");
-  const yourCourses =
-    courses_selected != null ? JSON.parse(courses_selected) : []; //Fixes string or null type error when parsing
-  const yourProgram = program_selected != null ? program_selected : "Undecided";
+
+  const yourCourses = myCourseIDs; // Fixes string or null type error when parsing
+  const yourProgram = myMajor ? myMajor : "Undecided"; // Handles invalid majors
 
   useEffect(() => {
-    //     fetch(baseUrl + "allMajors")
-    //   .then(response => {
-    //       if (!response.ok) {
-    //         throw new Error('Network response was not ok');
-    //       }
-    //       return response.json();
-    //     })
-    //     .then(data => {
-    //       setAllPrograms(data as Program[])
-    //     })
-
-    //     fetch(baseUrl + "allCourses")
-    //     .then(response => {
-    //         if (!response.ok) {
-    //           throw new Error('Network response was not ok');
-    //         }
-    //         return response.json();
-    //       })
-    //       .then(all_courses => {
-    //         setAllCourses(all_courses as Course[])
-    //       })
     setAllCourses(CoursesData as Course[]);
     setAllPrograms(ProgramData);
   }, []);
 
-  var creditCounter = 0;
-
-  function handleToggle() {
-    setToggle(!toggle);
-  }
-
-  function calculateTotalCredits(courseIds: string[], totalCredits: number) {
-    totalCredits = 0; // resets counter when you revise your courses
-    for (const courseId of courseIds) {
-      // Match course ID with the courses data
-      for (const course of allCourses) {
-        // for of statements invokes the Symbol.iterator. Ignore error for now
-        if (course.id.startsWith(courseId.substring(0, 7))) {
-          totalCredits += course.credits.numberOfCredits;
-          break; // Exit the inner loop after finding the course
-        }
-      }
-    }
-    return totalCredits;
-  }
-
   function calculateCredits(courseIds: string[]) {
-    var totalCredits = 0;
+    let totalCredits = 0;
     for (const courseId of courseIds) {
       // Match course ID with the courses data
       for (const course of allCourses) {
@@ -91,15 +60,15 @@ function ResultPage() {
   }
 
   function createStoreCourses(values: any, yourCourses: string[]) {
-    var storeCourses: string[] = [];
-    for (var e in values) {
+    const storeCourses: string[] = [];
+    for (const e in values) {
       const coursesObj = values[e]; //Ex: coursesObj = {"logic": "or","value": ["8257721","0099201","0062811","8019831"]}
       const logic = coursesObj.logic;
       const value = coursesObj.value;
 
-      for (var v of value) {
+      for (const v of value) {
         if (logic.includes("or")) {
-          for (var v of value) {
+          for (const v of value) {
             if (yourCourses.includes(v)) {
               //use 'includes()' instead of 'in' for strings
               storeCourses.push(v);
@@ -130,31 +99,34 @@ function ResultPage() {
     minCourses: number,
     maxCourses: number
   ) {
-    var subRuleObj = { [name]: "False" };
+    const subRuleObj = { [name]: "False" };
 
     switch (condition) {
-      case "completedAnyOf":
+      case "completedAnyOf": {
         if (storeCourses.length != 0) {
           subRuleObj[name] = "True";
         }
         break;
+      }
 
-      case "completedAllOf": // Logic is either "and" or "or"
+      case "completedAllOf": {
+        // Logic is either "and" or "or"
         if (storeCourses.length == values.length) {
           subRuleObj[name] = "True";
         }
         break;
+      }
 
-      case "minimumCredits":
-        var storeMinCredits = minCredits;
-        storeMinCredits -= storeCoursesCredits;
+      case "minimumCredits": {
+        const storeMinCredits = minCredits - storeCoursesCredits;
         if (storeMinCredits <= 0) {
           subRuleObj[name] = "True";
         }
         break;
+      }
 
-      case "completeVariableCoursesAndVariableCredits":
-        //Checks if credits or courses are used
+      case "completeVariableCoursesAndVariableCredits": {
+        // Checks if credits or courses are used
         if (
           storeCoursesCredits <= maxCourses &&
           storeCoursesCredits &&
@@ -174,22 +146,27 @@ function ResultPage() {
           subRuleObj[name] = "True";
         }
         break;
+      }
 
-      case "completedAtLeastXOf":
+      case "completedAtLeastXOf": {
         if (storeCourses.length >= minCourses) {
           subRuleObj[name] = "True";
         }
         break;
+      }
 
-      case "allOf":
+      case "allOf": {
         break;
+      }
 
-      case "anyOf":
+      case "anyOf": {
         break;
+      }
 
-      default:
+      default: {
         console.log("Condition Not Found:", condition);
         break;
+      }
     }
 
     return subRuleObj;
@@ -198,7 +175,7 @@ function ResultPage() {
   function createChecklist(programObj: any, yourCourses: string[]) {
     const requirements = programObj["requisites"]["requisitesSimple"];
     const checklist: any[] = [];
-    var validCourses: string[] = [];
+    const validCourses: string[] = [];
 
     requirements.forEach((req: any) => {
       const rules = req["rules"];
@@ -206,7 +183,7 @@ function ResultPage() {
 
       checklistObj["requirementTitle"] = req.name; //Adds titles like "Admission Requirements" or "Program Requirements" to checklist
 
-      for (var i in rules) {
+      for (const i in rules) {
         // Chracteristics of Rule TYPE 1: uses subRule, no values, conditions: ["allOf", "anyOf"]
         // Chracteristics of Rule TYPE 2: empty subRule, uses value, conditions: ["completedAllOf", "completedAnyOf", "completeVariableCoursesAndVariableCredits", "minimumCredits", "completedAtLeastXOf"]
         const rule = rules[i];
@@ -223,9 +200,9 @@ function ResultPage() {
 
         if (condition.includes("allOf")) {
           // Condition for handling type 1
-          let subRuleChecklist: any[] = [];
+          const subRuleChecklist: any[] = [];
 
-          for (var i in subRules) {
+          for (const i in subRules) {
             const subRule = subRules[i];
             const subName: string = subRule["name"]
               ? subRule["name"]
@@ -285,9 +262,9 @@ function ResultPage() {
             ]);
           }
         } else if (condition.includes("anyOf")) {
-          var subRuleChecklist: any[] = [];
+          const subRuleChecklist: any[] = [];
 
-          for (var i in subRules) {
+          for (const i in subRules) {
             const subRule = subRules[i];
             const subName: string = subRule["name"]
               ? subRule["name"]
@@ -354,29 +331,31 @@ function ResultPage() {
           validCourses.push(...storeCourses); // for tracking courses in program
 
           switch (condition) {
-            case "completedAnyOf":
+            case "completedAnyOf": {
               if (storeCourses.length != 0) {
                 checklistObj[coreName] = "True";
               }
               break;
+            }
 
-            case "completedAllOf": // Logic is either "and" or "or"
+            case "completedAllOf": {
+              // Logic is either "and" or "or"
               if (storeCourses.length == ruleValues.length) {
                 checklistObj[coreName] = "True";
               }
-
               break;
+            }
 
-            case "minimumCredits":
-              var storeMinCredits = rule.minCredits;
-              storeMinCredits -= storeCoursesCredits;
+            case "minimumCredits": {
+              const storeMinCredits = rule.minCredits - storeCoursesCredits;
               if (storeMinCredits <= 0) {
                 checklistObj[coreName] = "True";
               }
               break;
+            }
 
-            case "completeVariableCoursesAndVariableCredits":
-              //Checks if credits or courses are used
+            case "completeVariableCoursesAndVariableCredits": {
+              // Checks if credits or courses are used
               if (
                 storeCoursesCredits <= maxCredits &&
                 storeCoursesCredits &&
@@ -396,15 +375,18 @@ function ResultPage() {
                 checklistObj[coreName] = "True";
               }
               break;
+            }
 
-            case "completedAtLeastXOf":
+            case "completedAtLeastXOf": {
               if (storeCourses.length >= minCourses) {
                 checklistObj[coreName] = "True";
               }
               break;
+            }
 
-            default:
+            default: {
               break;
+            }
           }
         } else {
           console.log("Condition Unsupported:", condition);
@@ -449,43 +431,44 @@ function ResultPage() {
     }
   }
 
-  
+  function createSortedOverlap(lastObjChecklist:any){
+    //lastObj Ex: {"major": "Undecided", "curCreditsInProgram": "0", "programMaxCredits": null, "validCourses": "[]"}
+    if(lastObjChecklist.major == 'Undecided'){
+        return []
+    }
+    else{
+
+        const allLastObjs = allPrograms.map((prog:any) => {
+            if (onlyMajorCourses){
+                const validCourses = JSON.parse(lastObjChecklist.validCourses) ? JSON.parse(lastObjChecklist.validCourses): []
+                const checkList = createChecklist(prog, validCourses)
+                return checkList[checkList.length-1] //lastObj
+            }
+            else{
+                const checkList = createChecklist(prog, yourCourses)
+                return checkList[checkList.length-1] //lastObj
+            }
+        })
+
+        const relevantLastObjs = allLastObjs.filter((lastObj:customInfoObj) => {return Number(lastObj.curCreditsInProgram) > 0}) // Filters out programs with no overlap 
+        const sortByOverlap = relevantLastObjs.sort((a:any , b:any) => {return b.curCreditsInProgram - a.curCreditsInProgram}) // Sort by ascending to decending
+    
+        return sortByOverlap
+    }
+}
+
   const yourMajorChecklist = checkRequirements(yourProgram);
   const lastObjChecklist = yourMajorChecklist[yourMajorChecklist.length - 1];
-  const maxCreditsProgram = lastObjChecklist.programMaxCredits
-    ? lastObjChecklist.programMaxCredits
-    : "N/A";
+  const sortedByOverlap = createSortedOverlap(lastObjChecklist);
 
   return (
     <div>
-      <div>
-        <p className="text-lg font-bold">
-          Total Credits: {calculateTotalCredits(yourCourses, creditCounter)}
-        </p>
-        <p className="text-lg font-bold">
-          Credits In Your Program: {lastObjChecklist.curCreditsInProgram}
-        </p>
-        <p className="text-lg font-bold">
-          Max Credits In Your Program: {maxCreditsProgram}
-        </p>
-      </div>
-      <p className="text-lg font-bold">Show: </p>
-      <button
-        onClick={handleToggle}
-        className={`toggle-button ${
-          toggle ? "on" : "off"
-        } bg-gray-100 border-2 border-github-black shadow-md my-2`}
-      >
-        {toggle ? "All Courses" : "Courses in Your Major"}
-      </button>
-
-      <GopherMajorBarChart
-        myCourseIDs={yourCourses}
-        myMajor={yourProgram}
-        onlyMajorCourses={toggle}
-      />
+      {disableBarChart ? null : <BarChart sortedByOverlap={sortedByOverlap} />}
+      {disableChecklist ? null : (
+        <Checklist yourMajorChecklist={yourMajorChecklist} />
+      )}
     </div>
   );
 }
 
-export default ResultPage;
+export default GopherMajorBarChart;

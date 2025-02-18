@@ -4,7 +4,7 @@ function LandingPage() {
  
   return (
     <div> 
-      <ProgramSearchBar></ProgramSearchBar>
+      <ProgramSearchBar />
     </div>
   )
 }
